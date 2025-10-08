@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 export const OfferCard: FC = () => (
   <article className="cities__card place-card">
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <Link to={'/'}>
+      <Link to={'/offer/:id'}>
         <img className="place-card__image" src="../../../markup/img/room.jpg" width="260" height="200" alt="Place image"/>
       </Link>
     </div>
@@ -28,7 +28,7 @@ export const OfferCard: FC = () => (
         </div>
       </div>
       <h2 className="place-card__name">
-        <Link to={'/'}>Wood and stone place</Link>
+        <Link to={'/offer/:id'}>Wood and stone place</Link>
       </h2>
       <p className="place-card__type">Room</p>
     </div>
