@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {Link} from 'react-router-dom';
 
 export const LoginPage: FC = () => (
   <div className="page page--gray page--login">
@@ -6,9 +7,9 @@ export const LoginPage: FC = () => (
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link" href="../../../markup/main.html">
+            <Link to={'/'} className="header__logo-link">
               <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81" height="41" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -18,7 +19,7 @@ export const LoginPage: FC = () => (
       <div className="page__login-container container">
         <section className="login">
           <h1 className="login__title">Sign in</h1>
-          <form className="login__form form" action="#" method="post">
+          <form className="login__form form" action="/" method="post">
             <div className="login__input-wrapper form__input-wrapper">
               <label className="visually-hidden">E-mail</label>
               <input className="login__input form__input" type="email" name="email" placeholder="Email" required />
@@ -32,9 +33,9 @@ export const LoginPage: FC = () => (
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <a className="locations__item-link" href="#">
+            <Link to={'/login'} className="locations__item-link">
               <span>Amsterdam</span>
-            </a>
+            </Link>
           </div>
         </section>
       </div>

@@ -1,11 +1,12 @@
 import type {FC} from 'react';
+import {Link} from 'react-router-dom';
 
 export const OfferCard: FC = () => (
   <article className="cities__card place-card">
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href="#">
+      <Link to={'/'}>
         <img className="place-card__image" src="../../../markup/img/room.jpg" width="260" height="200" alt="Place image"/>
-      </a>
+      </Link>
     </div>
     <div className="place-card__info">
       <div className="place-card__price-wrapper">
@@ -27,7 +28,7 @@ export const OfferCard: FC = () => (
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">Wood and stone place</a>
+        <Link to={'/'}>Wood and stone place</Link>
       </h2>
       <p className="place-card__type">Room</p>
     </div>
