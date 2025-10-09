@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 export const LoginPage: FC = () => (
   <div className="page page--gray page--login">
@@ -7,7 +8,7 @@ export const LoginPage: FC = () => (
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link to={'/'} className="header__logo-link">
+            <Link to={PageRoutes.MAIN} className="header__logo-link">
               <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81" height="41" />
             </Link>
           </div>
@@ -33,7 +34,7 @@ export const LoginPage: FC = () => (
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link to={'/login'} className="locations__item-link">
+            <Link to={PageRoutes.LOGIN} className="locations__item-link">
               <span>Amsterdam</span>
             </Link>
           </div>

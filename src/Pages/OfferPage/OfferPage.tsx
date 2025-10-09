@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 export const OfferPage: FC = () => (
   <div className="page">
@@ -7,14 +8,14 @@ export const OfferPage: FC = () => (
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link className="header__logo-link" to={'/'}>
+            <Link className="header__logo-link" to={PageRoutes.MAIN}>
               <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
             </Link >
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <Link className="header__nav-link header__nav-link--profile" to={'/offer/:id'}>
+                <Link className="header__nav-link header__nav-link--profile" to={PageRoutes.OFFER}>
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
@@ -22,7 +23,7 @@ export const OfferPage: FC = () => (
                 </Link >
               </li>
               <li className="header__nav-item">
-                <Link className="header__nav-link" to={'/offer/:id'}>
+                <Link className="header__nav-link" to={PageRoutes.OFFER}>
                   <span className="header__signout">Sign out</span>
                 </Link >
               </li>
@@ -238,7 +239,7 @@ export const OfferPage: FC = () => (
           <div className="near-places__list places__list">
             <article className="near-places__card place-card">
               <div className="near-places__image-wrapper place-card__image-wrapper">
-                <Link to={'/offer/:id'}>
+                <Link to={PageRoutes.OFFER}>
                   <img className="place-card__image" src="../../../markup/img/room.jpg" width="260" height="200" alt="Place image"/>
                 </Link >
               </div>
@@ -262,7 +263,7 @@ export const OfferPage: FC = () => (
                   </div>
                 </div>
                 <h2 className="place-card__name">
-                  <Link to={'/offer/:id'}>Wood and stone place</Link >
+                  <Link to={PageRoutes.OFFER}>Wood and stone place</Link >
                 </h2>
                 <p className="place-card__type">Room</p>
               </div>
@@ -270,7 +271,7 @@ export const OfferPage: FC = () => (
 
             <article className="near-places__card place-card">
               <div className="near-places__image-wrapper place-card__image-wrapper">
-                <Link to={'/offer/:id'}>
+                <Link to={PageRoutes.OFFER}>
                   <img className="place-card__image" src="../../../markup/img/apartment-02.jpg" width="260" height="200" alt="Place image"/>
                 </Link >
               </div>
@@ -294,7 +295,7 @@ export const OfferPage: FC = () => (
                   </div>
                 </div>
                 <h2 className="place-card__name">
-                  <Link to={'/offer/:id'}>Canal View Prinsengracht</Link >
+                  <Link to={PageRoutes.OFFER}>Canal View Prinsengracht</Link >
                 </h2>
                 <p className="place-card__type">Apartment</p>
               </div>
@@ -305,7 +306,7 @@ export const OfferPage: FC = () => (
                 <span>Premium</span>
               </div>
               <div className="near-places__image-wrapper place-card__image-wrapper">
-                <Link to={'/offer/:id'}>
+                <Link to={PageRoutes.OFFER}>
                   <img className="place-card__image" src="../../../markup/img/apartment-03.jpg" width="260" height="200" alt="Place image"/>
                 </Link >
               </div>
@@ -329,7 +330,7 @@ export const OfferPage: FC = () => (
                   </div>
                 </div>
                 <h2 className="place-card__name">
-                  <Link to={'/offer/:id'}>Nice, cozy, warm big bed apartment</Link >
+                  <Link to={PageRoutes.OFFER}>Nice, cozy, warm big bed apartment</Link >
                 </h2>
                 <p className="place-card__type">Apartment</p>
               </div>

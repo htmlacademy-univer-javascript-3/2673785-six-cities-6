@@ -1,6 +1,7 @@
 import type {FC} from 'react';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
 import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 interface MainPageProps {
   offersCount: number;
@@ -21,7 +22,7 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <Link to={'/favorites'} className="header__nav-link header__nav-link--profile">
+                <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">Guest</span>
@@ -29,7 +30,7 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
                 </Link>
               </li>
               <li className="header__nav-item">
-                <Link to={'/login'} className="header__nav-link">
+                <Link to={PageRoutes.LOGIN} className="header__nav-link">
                   <span className="header__signout">Sign out</span>
                 </Link>
               </li>
@@ -45,32 +46,32 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
         <section className="locations container">
           <ul className="locations__list tabs__list">
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Paris</span>
               </Link>
             </li>
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Cologne</span>
               </Link>
             </li>
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Brussels</span>
               </Link>
             </li>
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Amsterdam</span>
               </Link>
             </li>
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Hamburg</span>
               </Link>
             </li>
             <li className="locations__item">
-              <Link to={'/'} className="locations__item-link tabs__item">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Dusseldorf</span>
               </Link>
             </li>

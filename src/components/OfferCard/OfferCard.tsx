@@ -1,10 +1,11 @@
 import type {FC} from 'react';
 import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 export const OfferCard: FC = () => (
   <article className="cities__card place-card">
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <Link to={'/offer/:id'}>
+      <Link to={PageRoutes.OFFER}>
         <img className="place-card__image" src="../../../markup/img/room.jpg" width="260" height="200" alt="Place image"/>
       </Link>
     </div>
@@ -28,7 +29,7 @@ export const OfferCard: FC = () => (
         </div>
       </div>
       <h2 className="place-card__name">
-        <Link to={'/offer/:id'}>Wood and stone place</Link>
+        <Link to={PageRoutes.OFFER}>Wood and stone place</Link>
       </h2>
       <p className="place-card__type">Room</p>
     </div>
