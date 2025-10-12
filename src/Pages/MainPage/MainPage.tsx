@@ -1,5 +1,7 @@
 import type {FC} from 'react';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
+import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 interface MainPageProps {
   offersCount: number;
@@ -12,23 +14,25 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
         <div className="header__wrapper">
           <div className="header__left">
             <a className="header__logo-link header__logo-link--active">
-              <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
+              <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81"
+                height="41"
+              />
             </a>
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <a className="header__nav-link header__nav-link--profile" href="#">
+                <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
-                  <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                  <span className="header__favorite-count">3</span>
-                </a>
+                  <span className="header__user-name user__name">Guest</span>
+                  <span className="header__favorite-count">0</span>
+                </Link>
               </li>
               <li className="header__nav-item">
-                <a className="header__nav-link" href="#">
+                <Link to={PageRoutes.LOGIN} className="header__nav-link">
                   <span className="header__signout">Sign out</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -42,34 +46,34 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
         <section className="locations container">
           <ul className="locations__list tabs__list">
             <li className="locations__item">
-              <a className="locations__item-link tabs__item" href="#">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Paris</span>
-              </a>
+              </Link>
             </li>
             <li className="locations__item">
-              <a className="locations__item-link tabs__item" href="#">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Cologne</span>
-              </a>
+              </Link>
             </li>
             <li className="locations__item">
-              <a className="locations__item-link tabs__item" href="#">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Brussels</span>
-              </a>
+              </Link>
             </li>
             <li className="locations__item">
-              <a className="locations__item-link tabs__item tabs__item--active">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Amsterdam</span>
-              </a>
+              </Link>
             </li>
             <li className="locations__item">
-              <a className="locations__item-link tabs__item" href="#">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Hamburg</span>
-              </a>
+              </Link>
             </li>
             <li className="locations__item">
-              <a className="locations__item-link tabs__item" href="#">
+              <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
                 <span>Dusseldorf</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </section>

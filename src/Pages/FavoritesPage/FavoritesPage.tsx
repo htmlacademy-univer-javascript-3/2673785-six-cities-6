@@ -1,4 +1,6 @@
 import {FC} from 'react';
+import {Link} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
 export const FavoritesPage: FC = () => (
   <div className="page">
@@ -6,24 +8,25 @@ export const FavoritesPage: FC = () => (
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <a className="header__logo-link" href="../../../markup/main.html">
+            <Link to={PageRoutes.MAIN} className="header__logo-link">
               <img className="header__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="81" height="41" />
-            </a>
+            </Link>
           </div>
           <nav className="header__nav">
             <ul className="header__nav-list">
               <li className="header__nav-item user">
-                <a className="header__nav-link header__nav-link--profile" href="#">
+                <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
                   <span className="header__favorite-count">3</span>
-                </a>
+                </Link>
               </li>
               <li className="header__nav-item">
-                <a className="header__nav-link" href="#">
+
+                <Link className="header__nav-link" to={PageRoutes.FAVORITES}>
                   <span className="header__signout">Sign out</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -39,9 +42,9 @@ export const FavoritesPage: FC = () => (
             <li className="favorites__locations-items">
               <div className="favorites__locations locations locations--current">
                 <div className="locations__item">
-                  <a className="locations__item-link" href="#">
+                  <Link className="locations__item-link" to={PageRoutes.FAVORITES}>
                     <span>Amsterdam</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="favorites__places">
@@ -50,9 +53,9 @@ export const FavoritesPage: FC = () => (
                     <span>Premium</span>
                   </div>
                   <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="#">
+                    <Link to={PageRoutes.FAVORITES}>
                       <img className="place-card__image" src="../../../markup/img/apartment-small-03.jpg" width="150" height="110" alt="Place image" />
-                    </a>
+                    </Link>
                   </div>
                   <div className="favorites__card-info place-card__info">
                     <div className="place-card__price-wrapper">
@@ -74,7 +77,7 @@ export const FavoritesPage: FC = () => (
                       </div>
                     </div>
                     <h2 className="place-card__name">
-                      <a href="#">Nice, cozy, warm big bed apartment</a>
+                      <Link to={PageRoutes.FAVORITES}>Nice, cozy, warm big bed apartment</Link>
                     </h2>
                     <p className="place-card__type">Apartment</p>
                   </div>
@@ -82,9 +85,9 @@ export const FavoritesPage: FC = () => (
 
                 <article className="favorites__card place-card">
                   <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="#">
+                    <Link to={PageRoutes.FAVORITES}>
                       <img className="place-card__image" src="../../../markup/img/room-small.jpg" width="150" height="110" alt="Place image" />
-                    </a>
+                    </Link>
                   </div>
                   <div className="favorites__card-info place-card__info">
                     <div className="place-card__price-wrapper">
@@ -106,7 +109,7 @@ export const FavoritesPage: FC = () => (
                       </div>
                     </div>
                     <h2 className="place-card__name">
-                      <a href="#">Wood and stone place</a>
+                      <Link to={PageRoutes.FAVORITES}>Wood and stone place</Link>
                     </h2>
                     <p className="place-card__type">Room</p>
                   </div>
@@ -117,17 +120,17 @@ export const FavoritesPage: FC = () => (
             <li className="favorites__locations-items">
               <div className="favorites__locations locations locations--current">
                 <div className="locations__item">
-                  <a className="locations__item-link" href="#">
+                  <Link className="locations__item-link" to={PageRoutes.FAVORITES}>
                     <span>Cologne</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="favorites__places">
                 <article className="favorites__card place-card">
                   <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="#">
+                    <Link to={PageRoutes.FAVORITES}>
                       <img className="place-card__image" src="../../../markup/img/apartment-small-04.jpg" width="150" height="110" alt="Place image"/>
-                    </a>
+                    </Link>
                   </div>
                   <div className="favorites__card-info place-card__info">
                     <div className="place-card__price-wrapper">
@@ -149,7 +152,7 @@ export const FavoritesPage: FC = () => (
                       </div>
                     </div>
                     <h2 className="place-card__name">
-                      <a href="#">White castle</a>
+                      <Link to={PageRoutes.FAVORITES}>White castle</Link>
                     </h2>
                     <p className="place-card__type">Apartment</p>
                   </div>
@@ -161,9 +164,9 @@ export const FavoritesPage: FC = () => (
       </div>
     </main>
     <footer className="footer container">
-      <a className="footer__logo-link" href="../../../markup/main.html">
+      <Link to={PageRoutes.MAIN} className="footer__logo-link">
         <img className="footer__logo" src="../../../markup/img/logo.svg" alt="6 cities logo" width="64" height="33" />
-      </a>
+      </Link>
     </footer>
   </div>
 );
