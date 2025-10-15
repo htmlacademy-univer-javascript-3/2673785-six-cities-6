@@ -3,5 +3,5 @@ export const PageRoutes = {
   LOGIN: '/login',
   FAVORITES: '/favorites',
   OFFER: '/offer/:id',
-  DEFAULT: '*',
+  NOT_FOUND: '*',
 };
