@@ -2,7 +2,11 @@ import {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 
-export const LoginPage: FC = () => (
+interface LoginPageProps {
+  setIsAuthorized: (isAuthorized: boolean) => void;
+}
+
+export const LoginPage: FC<LoginPageProps> = ({setIsAuthorized}) => (
   <div className="page page--gray page--login">
     <header className="header">
       <div className="container">
@@ -20,7 +24,7 @@ export const LoginPage: FC = () => (
       <div className="page__login-container container">
         <section className="login">
           <h1 className="login__title">Sign in</h1>
-          <form className="login__form form" action="/" method="post">
+          <form className="login__form form">
             <div className="login__input-wrapper form__input-wrapper">
               <label className="visually-hidden">E-mail</label>
               <input className="login__input form__input" type="email" name="email" placeholder="Email" required />
@@ -29,7 +33,9 @@ export const LoginPage: FC = () => (
               <label className="visually-hidden">Password</label>
               <input className="login__input form__input" type="password" name="password" placeholder="Password" required />
             </div>
-            <button className="login__submit form__submit button" type="submit">Sign in</button>
+            <Link to={PageRoutes.MAIN}>
+              <button className="login__submit form__submit button" type="submit" onClick={() => setIsAuthorized(true)}>Sign in</button>
+            </Link>
           </form>
         </section>
         <section className="locations locations--login locations--current">

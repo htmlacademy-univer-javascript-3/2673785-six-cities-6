@@ -1,13 +1,18 @@
 import type {FC} from 'react';
-import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
+import {Offer} from '../../types/offerTypes/offer.ts';
+import {Offers} from '../../components/Offers/Offers.tsx';
 
 interface MainPageProps {
   offersCount: number;
+  offers: Offer[];
+  favoritesCount: number;
+  isAuthorized?: boolean;
+  setIsAuthorized: (isAuthorized: boolean) => void;
 }
 
-export const MainPage: FC<MainPageProps> = ({offersCount}) => (
+export const MainPage: FC<MainPageProps> = ({offersCount, offers, favoritesCount, isAuthorized = false, setIsAuthorized}) => (
   <div className="page page--gray page--main">
     <header className="header">
       <div className="container">
@@ -25,13 +30,13 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
                 <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
-                  <span className="header__user-name user__name">Guest</span>
-                  <span className="header__favorite-count">0</span>
+                  <span className="header__user-name user__name">{isAuthorized ? 'Oliver.conner@gmail.com' : 'Guest'}</span>
+                  <span className="header__favorite-count">{isAuthorized ? favoritesCount : 0}</span>
                 </Link>
               </li>
               <li className="header__nav-item">
                 <Link to={PageRoutes.LOGIN} className="header__nav-link">
-                  <span className="header__signout">Sign out</span>
+                  <span className="header__signout" onClick={() => setIsAuthorized(false)}>Sign out</span>
                 </Link>
               </li>
             </ul>
@@ -80,28 +85,7 @@ export const MainPage: FC<MainPageProps> = ({offersCount}) => (
       </div>
       <div className="cities">
         <div className="cities__places-container container">
-          <section className="cities__places places">
-            <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offersCount} places to stay in Amsterdam</b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex={0}>
-                Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"></use>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                <li className="places__option" tabIndex={0}>Price: low to high</li>
-                <li className="places__option" tabIndex={0}>Price: high to low</li>
-                <li className="places__option" tabIndex={0}>Top rated first</li>
-              </ul>
-            </form>
-            <div className="cities__places-list places__list tabs__content">
-              {Array.from({length: offersCount}).map(() => <OfferCard key={crypto.randomUUID()}/>)}
-            </div>
-          </section>
+          <Offers offers={offers} offersCount={offersCount}/>
           <div className="cities__right-section">
             <section className="cities__map map"></section>
           </div>

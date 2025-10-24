@@ -1,37 +1,46 @@
 import type {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
+import {Offer} from '../../types/offerTypes/offer.ts';
 
-export const OfferCard: FC = () => (
-  <article className="cities__card place-card">
+const PATH_TO_IMAGES = '../../../markup/img/';
+
+interface OfferCardProps {
+  offer: Offer;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}
+
+export const OfferCard: FC<OfferCardProps> = ({offer, onMouseEnter, onMouseLeave}) => (
+  <article className="cities__card place-card" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
     <div className="cities__image-wrapper place-card__image-wrapper">
       <Link to={PageRoutes.OFFER}>
-        <img className="place-card__image" src="../../../markup/img/room.jpg" width="260" height="200" alt="Place image"/>
+        <img className="place-card__image" src={`${PATH_TO_IMAGES}${offer.images[0]}`} width="260" height="200" alt="Place image"/>
       </Link>
     </div>
     <div className="place-card__info">
       <div className="place-card__price-wrapper">
         <div className="place-card__price">
-          <b className="place-card__price-value">&euro;80</b>
+          <b className="place-card__price-value">&euro;{offer.price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
         <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
           <svg className="place-card__bookmark-icon" width="18" height="19">
-            <use xlinkHref="#icon-bookmark"></use>
+            {offer.isFavorite && <use xlinkHref="#icon-bookmark"></use>}
           </svg>
           <span className="visually-hidden">In bookmarks</span>
         </button>
       </div>
       <div className="place-card__rating rating">
         <div className="place-card__stars rating__stars">
-          <span style={{width: '80%'}}></span>
+          <span style={{width: `${offer.rating * 20}%`}}></span>
           <span className="visually-hidden">Rating</span>
         </div>
       </div>
       <h2 className="place-card__name">
-        <Link to={PageRoutes.OFFER}>Wood and stone place</Link>
+        <Link to={PageRoutes.OFFER}>{offer.title}</Link>
       </h2>
-      <p className="place-card__type">Room</p>
+      <p className="place-card__type">{offer.type}</p>
     </div>
   </article>
 );
