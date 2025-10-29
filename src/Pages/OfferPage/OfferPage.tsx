@@ -7,15 +7,19 @@ import {City, Point} from '../../types/types.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
 import {Reviews} from '../../components/Reviews/Reviews.tsx';
 import {Review} from '../../types/offerTypes/review.ts';
+import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
 
 interface OfferPage {
   isAuthorized: boolean;
   setIsAuthorized: (isAuthorized: boolean) => void;
-  offer: Offer;
+  offers: Offer[];
   reviews: Review[];
 }
 
-export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer, reviews}) => {
+export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers, reviews}) => {
+  const offer = offers[0];
+  const neighbourOffers = offers.slice(1);
+
   const city: City = {
     title: 'Amsterdam',
     lat: offer.location.latitude,
@@ -181,14 +185,11 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer, 
                   </span>
                 </div>
                 <div className='offer__description'>
-                  <p className='offer__text'>
-                    A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The
-                    building is green and from 18th century.
-                  </p>
-                  <p className='offer__text'>
-                    An independent House, strategically located between Rembrand Square and National Opera, but where the
-                    bustle of the city comes to rest in this alley flowery and colorful.
-                  </p>
+                  {offer.description.map((descriptionPart) => (
+                    <p key={crypto.randomUUID()} className='offer__text'>
+                      {descriptionPart}
+                    </p>
+                  ))}
                 </div>
               </div>
               <section className='offer__reviews reviews'>
@@ -205,104 +206,9 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer, 
           <section className='near-places places'>
             <h2 className='near-places__title'>Other places in the neighbourhood</h2>
             <div className='near-places__list places__list'>
-              <article className='near-places__card place-card'>
-                <div className='near-places__image-wrapper place-card__image-wrapper'>
-                  <Link to={PageRoutes.OFFER}>
-                    <img className='place-card__image' src='../../../markup/img/room.jpg' width='260' height='200' alt='Place image'/>
-                  </Link >
-                </div>
-                <div className='place-card__info'>
-                  <div className='place-card__price-wrapper'>
-                    <div className='place-card__price'>
-                      <b className='place-card__price-value'>&euro;80</b>
-                      <span className='place-card__price-text'>&#47;&nbsp;night</span>
-                    </div>
-                    <button className='place-card__bookmark-button place-card__bookmark-button--active button' type='button'>
-                      <svg className='place-card__bookmark-icon' width='18' height='19'>
-                        <use xlinkHref='#icon-bookmark'></use>
-                      </svg>
-                      <span className='visually-hidden'>In bookmarks</span>
-                    </button>
-                  </div>
-                  <div className='place-card__rating rating'>
-                    <div className='place-card__stars rating__stars'>
-                      <span style={{width: '80%'}}></span>
-                      <span className='visually-hidden'>Rating</span>
-                    </div>
-                  </div>
-                  <h2 className='place-card__name'>
-                    <Link to={PageRoutes.OFFER}>Wood and stone place</Link >
-                  </h2>
-                  <p className='place-card__type'>Room</p>
-                </div>
-              </article>
-
-              <article className='near-places__card place-card'>
-                <div className='near-places__image-wrapper place-card__image-wrapper'>
-                  <Link to={PageRoutes.OFFER}>
-                    <img className='place-card__image' src='../../../markup/img/apartment-02.jpg' width='260' height='200' alt='Place image'/>
-                  </Link >
-                </div>
-                <div className='place-card__info'>
-                  <div className='place-card__price-wrapper'>
-                    <div className='place-card__price'>
-                      <b className='place-card__price-value'>&euro;132</b>
-                      <span className='place-card__price-text'>&#47;&nbsp;night</span>
-                    </div>
-                    <button className='place-card__bookmark-button button' type='button'>
-                      <svg className='place-card__bookmark-icon' width='18' height='19'>
-                        <use xlinkHref='#icon-bookmark'></use>
-                      </svg>
-                      <span className='visually-hidden'>To bookmarks</span>
-                    </button>
-                  </div>
-                  <div className='place-card__rating rating'>
-                    <div className='place-card__stars rating__stars'>
-                      <span style={{width: '80%'}}></span>
-                      <span className='visually-hidden'>Rating</span>
-                    </div>
-                  </div>
-                  <h2 className='place-card__name'>
-                    <Link to={PageRoutes.OFFER}>Canal View Prinsengracht</Link >
-                  </h2>
-                  <p className='place-card__type'>Apartment</p>
-                </div>
-              </article>
-
-              <article className='near-places__card place-card'>
-                <div className='place-card__mark'>
-                  <span>Premium</span>
-                </div>
-                <div className='near-places__image-wrapper place-card__image-wrapper'>
-                  <Link to={PageRoutes.OFFER}>
-                    <img className='place-card__image' src='../../../markup/img/apartment-03.jpg' width='260' height='200' alt='Place image'/>
-                  </Link >
-                </div>
-                <div className='place-card__info'>
-                  <div className='place-card__price-wrapper'>
-                    <div className='place-card__price'>
-                      <b className='place-card__price-value'>&euro;180</b>
-                      <span className='place-card__price-text'>&#47;&nbsp;night</span>
-                    </div>
-                    <button className='place-card__bookmark-button button' type='button'>
-                      <svg className='place-card__bookmark-icon' width='18' height='19'>
-                        <use xlinkHref='#icon-bookmark'></use>
-                      </svg>
-                      <span className='visually-hidden'>To bookmarks</span>
-                    </button>
-                  </div>
-                  <div className='place-card__rating rating'>
-                    <div className='place-card__stars rating__stars'>
-                      <span style={{width: '100%'}}></span>
-                      <span className='visually-hidden'>Rating</span>
-                    </div>
-                  </div>
-                  <h2 className='place-card__name'>
-                    <Link to={PageRoutes.OFFER}>Nice, cozy, warm big bed apartment</Link >
-                  </h2>
-                  <p className='place-card__type'>Apartment</p>
-                </div>
-              </article>
+              {neighbourOffers.map((neighbourOffer) => (
+                <OfferCard offer={neighbourOffer} variant={'neighbours'} key={neighbourOffer.id}/>
+              ))}
             </div>
           </section>
         </div>
