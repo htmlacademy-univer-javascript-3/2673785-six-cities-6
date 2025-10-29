@@ -25,7 +25,7 @@ export interface Offer {
   isFavorite: boolean;
 
   shortDescription: string;
-  description: string;
+  description: string[];
   type: PlaceType;
   bedrooms: number;
   maxGuests: number;

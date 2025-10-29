@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
-import {FavoritesOfferCard} from '../../components/FavoritesOfferCard/FavoritesOfferCard.tsx';
+import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
 
 interface FavoritesPageProps {
   favorites: number[];
@@ -57,8 +57,8 @@ export const FavoritesPage: FC<FavoritesPageProps> = ({favorites, offers, isAuth
                 </div>
               </div>
               <div className="favorites__places">
-                <FavoritesOfferCard offer={offers.find((offer) => offer.id === favorites[0])}/>
-                <FavoritesOfferCard offer={offers.find((offer) => offer.id === favorites[1])}/>
+                <OfferCard variant='favorites' offer={offers.find((offer) => offer.id === favorites[0])}/>
+                <OfferCard variant='favorites' offer={offers.find((offer) => offer.id === favorites[1])}/>
               </div>
             </li>
 
@@ -71,7 +71,7 @@ export const FavoritesPage: FC<FavoritesPageProps> = ({favorites, offers, isAuth
                 </div>
               </div>
               <div className="favorites__places">
-                <FavoritesOfferCard offer={offers.find((offer) => offer.id === favorites[2])}/>
+                <OfferCard variant='favorites' offer={offers.find((offer) => offer.id === favorites[2])}/>
               </div>
             </li>
           </ul>

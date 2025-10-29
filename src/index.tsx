@@ -4,6 +4,7 @@ import {BrowserRouter} from 'react-router-dom';
 import {App} from './App/App.tsx';
 import {mockOffers} from './mocks/offers.ts';
 import {mockFavorites} from './mocks/favorites.ts';
+import {mockReviews} from './mocks/reviews.ts';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter basename={''}>
-      <App offers={mockOffers} favorites={mockFavorites}/>
+      <App offers={mockOffers} favorites={mockFavorites} reviews={mockReviews}/>
     </BrowserRouter>
   </React.StrictMode>
 );

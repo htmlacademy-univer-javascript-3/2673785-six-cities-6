@@ -112,6 +112,7 @@ export const Offers: FC<OffersProps> = ({offersCount, offers}) => {
           <OfferCard
             offer={offer}
             key={offer.id}
+            variant={'cities'}
             onMouseEnter={() => handleOfferMouseEnter(offer.id)}
             onMouseLeave={handleOfferMouseLeave}
           />
