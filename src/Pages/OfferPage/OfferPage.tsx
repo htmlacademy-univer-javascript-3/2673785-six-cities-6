@@ -5,14 +5,17 @@ import {ReviewForm} from '../../components/ReviewForm/ReviewForm.tsx';
 import {Map} from '../../components/Map/Map.tsx';
 import {City, Point} from '../../types/types.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
+import {Reviews} from '../../components/Reviews/Reviews.tsx';
+import {Review} from '../../types/offerTypes/review.ts';
 
 interface OfferPage {
   isAuthorized: boolean;
   setIsAuthorized: (isAuthorized: boolean) => void;
   offer: Offer;
+  reviews: Review[];
 }
 
-export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer}) => {
+export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer, reviews}) => {
   const city: City = {
     title: 'Amsterdam',
     lat: offer.location.latitude,
@@ -189,32 +192,7 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offer})
                 </div>
               </div>
               <section className='offer__reviews reviews'>
-                <h2 className='reviews__title'>Reviews &middot; <span className='reviews__amount'>1</span></h2>
-                <ul className='reviews__list'>
-                  <li className='reviews__item'>
-                    <div className='reviews__user user'>
-                      <div className='reviews__avatar-wrapper user__avatar-wrapper'>
-                        <img className='reviews__avatar user__avatar' src='../../../markup/img/avatar-max.jpg' width='54' height='54' alt='Reviews avatar'/>
-                      </div>
-                      <span className='reviews__user-name'>
-                      Max
-                      </span>
-                    </div>
-                    <div className='reviews__info'>
-                      <div className='reviews__rating rating'>
-                        <div className='reviews__stars rating__stars'>
-                          <span style={{width: '80%'}}></span>
-                          <span className='visually-hidden'>Rating</span>
-                        </div>
-                      </div>
-                      <p className='reviews__text'>
-                        A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The
-                        building is green and from 18th century.
-                      </p>
-                      <time className='reviews__time' dateTime='2019-04-24'>April 2019</time>
-                    </div>
-                  </li>
-                </ul>
+                <Reviews reviews={reviews}/>
                 <ReviewForm></ReviewForm>
               </section>
             </div>

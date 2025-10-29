@@ -8,6 +8,7 @@ import {ErrorPage} from '../Pages/ErrorPage/ErrorPage.tsx';
 import {PrivateRoute} from '../components/PrivateRoute/PrivateRoute.tsx';
 import {PageRoutes} from '../constants/PageRoutes/PageRoutes.ts';
 import {Offer} from '../types/offerTypes/offer.ts';
+import {Review} from '../types/offerTypes/review.ts';
 
 interface MainContainerProps {
   offersCount: number;
@@ -15,9 +16,10 @@ interface MainContainerProps {
   favorites: number[];
   offers: Offer[];
   setIsAuthorized: (isAuthorized: boolean) => void;
+  reviews: Review[];
 }
 
-export const MainContainer: FC<MainContainerProps> = ({offersCount, isAuthorized, setIsAuthorized, offers, favorites}) => (
+export const MainContainer: FC<MainContainerProps> = ({offersCount, isAuthorized, setIsAuthorized, offers, favorites, reviews}) => (
   <Routes>
     <Route path={PageRoutes.MAIN} element={
       <MainPage
@@ -38,7 +40,7 @@ export const MainContainer: FC<MainContainerProps> = ({offersCount, isAuthorized
         </PrivateRoute>
       }
     />
-    <Route path={PageRoutes.OFFER} element={<OfferPage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} offer={offers[0]}/>}/>
+    <Route path={PageRoutes.OFFER} element={<OfferPage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} offer={offers[0]} reviews={reviews}/>}/>
     <Route path={PageRoutes.NOT_FOUND} element={<ErrorPage/>}/>
   </Routes>
 );
