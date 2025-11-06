@@ -38,7 +38,7 @@ export const MainContainer: FC<MainContainerProps> = ({offersCount, isAuthorized
         </PrivateRoute>
       }
     />
-    <Route path={PageRoutes.OFFER} element={<OfferPage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized}/>}/>
+    <Route path={PageRoutes.OFFER} element={<OfferPage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} offer={offers[0]}/>}/>
     <Route path={PageRoutes.NOT_FOUND} element={<ErrorPage/>}/>
   </Routes>
 );
