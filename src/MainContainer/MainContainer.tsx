@@ -11,7 +11,6 @@ import {Offer} from '../types/offerTypes/offer.ts';
 import {Review} from '../types/offerTypes/review.ts';
 
 interface MainContainerProps {
-  offersCount: number;
   isAuthorized: boolean;
   favorites: number[];
   offers: Offer[];
@@ -19,11 +18,10 @@ interface MainContainerProps {
   reviews: Review[];
 }
 
-export const MainContainer: FC<MainContainerProps> = ({offersCount, isAuthorized, setIsAuthorized, offers, favorites, reviews}) => (
+export const MainContainer: FC<MainContainerProps> = ({isAuthorized, setIsAuthorized, offers, favorites, reviews}) => (
   <Routes>
     <Route path={PageRoutes.MAIN} element={
       <MainPage
-        offersCount={offersCount}
         offers={offers}
         isAuthorized={isAuthorized}
         favoritesCount={favorites.length}
