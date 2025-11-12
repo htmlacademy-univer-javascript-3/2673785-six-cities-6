@@ -6,16 +6,16 @@ import {Offers} from '../../components/Offers/Offers.tsx';
 import {City, Point, Points} from '../../types/types.ts';
 import {useState} from 'react';
 import {Map} from '../../components/Map/Map.tsx';
+import {Cities} from '../../components/Cities/Cities.tsx';
 
 interface MainPageProps {
-  offersCount: number;
   offers: Offer[];
   favoritesCount: number;
   isAuthorized?: boolean;
   setIsAuthorized: (isAuthorized: boolean) => void;
 }
 
-export const MainPage: FC<MainPageProps> = ({offersCount, offers, favoritesCount, isAuthorized = false, setIsAuthorized}) => {
+export const MainPage: FC<MainPageProps> = ({offers, favoritesCount, isAuthorized = false, setIsAuthorized}) => {
   const city: City = {
     title: 'Amsterdam',
     lat: offers[0].location.latitude,
@@ -64,45 +64,10 @@ export const MainPage: FC<MainPageProps> = ({offersCount, offers, favoritesCount
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Paris</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Cologne</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Brussels</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Amsterdam</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Hamburg</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link to={PageRoutes.MAIN} className="locations__item-link tabs__item">
-                  <span>Dusseldorf</span>
-                </Link>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <Cities />
         <div className="cities">
           <div className="cities__places-container container">
-            <Offers offers={offers} offersCount={offersCount}/>
+            <Offers />
             <div className="cities__right-section">
               <section className="cities__map map">
                 <Map city={city} selectedPoint={selectedPoint} points={points} />
