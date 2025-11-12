@@ -25,7 +25,6 @@ const AppInitializer: FC<AppProps> = ({ offers, favorites, reviews }) => {
     <MainContainer
       setIsAuthorized={setIsAuthorized}
       offers={offers}
-      offersCount={offers.length}
       favorites={favorites}
       isAuthorized={isAuthorized}
       reviews={reviews}
