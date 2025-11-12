@@ -14,6 +14,8 @@ export const FavoritesOfferCard: FC<FavoritesOfferCardProps> = ({offer}) => {
     return null;
   }
 
+  const rating = `${offer.rating * 20}%`;
+
   return (
     <article className='favorites__card place-card'>
       <div className='place-card__mark'>
@@ -39,7 +41,7 @@ export const FavoritesOfferCard: FC<FavoritesOfferCardProps> = ({offer}) => {
         </div>
         <div className='place-card__rating rating'>
           <div className='place-card__stars rating__stars'>
-            <span style={{width: `${offer.rating * 20}%`}}></span>
+            <span style={{width: rating}}></span>
             <span className='visually-hidden'>Rating</span>
           </div>
         </div>
