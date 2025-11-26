@@ -1,6 +1,29 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../types/storeTypes/storeTypes.ts';
 
+export const selectAuthorizationState = (state: RootState) => state.authorization;
+
+export const selectAuthorizationStatus = createSelector(
+  selectAuthorizationState,
+  (authorizationState) => authorizationState.authorizationStatus
+);
+
+export const selectUser = createSelector(
+  selectAuthorizationState,
+  (authorizationState) => authorizationState.user
+);
+
+export const selectAuthorizationLoading = createSelector(
+  selectAuthorizationState,
+  (authorizationState) => authorizationState.isLoading
+);
+
+export const selectAuthorizationError = createSelector(
+  selectAuthorizationState,
+  (authorizationState) => authorizationState.error
+);
+
+
 export const selectOffersState = (state: RootState) => state.offers;
 
 export const selectCurrentCity = createSelector(
