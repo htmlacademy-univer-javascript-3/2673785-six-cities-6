@@ -11,34 +11,30 @@ import {Offer} from '../types/offerTypes/offer.ts';
 import {Review} from '../types/offerTypes/review.ts';
 
 interface MainContainerProps {
-  isAuthorized: boolean;
   favorites: number[];
   offers: Offer[];
-  setIsAuthorized: (isAuthorized: boolean) => void;
   reviews: Review[];
 }
 
-export const MainContainer: FC<MainContainerProps> = ({isAuthorized, setIsAuthorized, offers, favorites, reviews}) => (
+export const MainContainer: FC<MainContainerProps> = ({offers, favorites, reviews}) => (
   <Routes>
     <Route path={PageRoutes.MAIN} element={
       <MainPage
         offers={offers}
-        isAuthorized={isAuthorized}
         favoritesCount={favorites.length}
-        setIsAuthorized={setIsAuthorized}
       />
     }
     />
-    <Route path={PageRoutes.LOGIN} element={<LoginPage setIsAuthorized={setIsAuthorized}/>}/>
+    <Route path={PageRoutes.LOGIN} element={<LoginPage />}/>
     <Route
       path={PageRoutes.FAVORITES}
       element={
-        <PrivateRoute isAuthorized={isAuthorized} redirectPath={PageRoutes.LOGIN}>
-          <FavoritesPage offers={offers} favorites={favorites} setIsAuthorized={setIsAuthorized} isAuthorized={isAuthorized}/>
+        <PrivateRoute redirectPath={PageRoutes.LOGIN}>
+          <FavoritesPage offers={offers} favorites={favorites}/>
         </PrivateRoute>
       }
     />
-    <Route path={PageRoutes.OFFER} element={<OfferPage isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} offers={offers} reviews={reviews}/>}/>
+    <Route path={PageRoutes.OFFER} element={<OfferPage offers={offers} reviews={reviews}/>}/>
     <Route path={PageRoutes.NOT_FOUND} element={<ErrorPage/>}/>
   </Routes>
 );

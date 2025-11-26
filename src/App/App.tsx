@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {MainContainer} from '../MainContainer/MainContainer.tsx';
 import {Review} from '../types/offerTypes/review.ts';
 import {Provider} from 'react-redux';
@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from '../hooks/redux.ts';
 import {fetchOffers} from '../features/offersThunks.ts';
 import {selectAllOffers, selectOffersLoading} from '../selectors/selectors.ts';
 import {Spinner} from '../components/Spinner/Spinner.tsx';
+import {checkAuthorization} from '../features/authorizationThunks.ts';
 
 interface AppProps {
   favorites: number[];
@@ -15,12 +16,12 @@ interface AppProps {
 
 const AppInitializer: FC<AppProps> = ({ favorites, reviews }) => {
   const dispatch = useAppDispatch();
-  const [isAuthorized, setIsAuthorized] = useState(true);
   const isLoading = useAppSelector(selectOffersLoading);
   const offers = useAppSelector(selectAllOffers);
 
   useEffect(() => {
     dispatch(fetchOffers());
+    dispatch(checkAuthorization());
   }, [dispatch]);
 
   if (isLoading && offers.length === 0) {
@@ -31,10 +32,8 @@ const AppInitializer: FC<AppProps> = ({ favorites, reviews }) => {
 
   return (
     <MainContainer
-      setIsAuthorized={setIsAuthorized}
       offers={offers}
       favorites={favorites}
-      isAuthorized={isAuthorized}
       reviews={reviews}
     />
   );
