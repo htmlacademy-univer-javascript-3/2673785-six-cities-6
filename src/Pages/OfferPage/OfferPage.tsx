@@ -17,6 +17,9 @@ interface OfferPage {
 }
 
 export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers, reviews}) => {
+  if (!offers || offers.length === 0) {
+    return null;
+  }
   const offer = offers[0];
   const neighbourOffers = offers.slice(1);
 
@@ -185,11 +188,12 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers,
                   </span>
                 </div>
                 <div className='offer__description'>
-                  {offer.description.map((descriptionPart) => (
-                    <p key={crypto.randomUUID()} className='offer__text'>
-                      {descriptionPart}
-                    </p>
-                  ))}
+                  {/*{offer.description.map((descriptionPart) => (*/}
+                  {/*  <p key={crypto.randomUUID()} className='offer__text'>*/}
+                  {/*    {descriptionPart}*/}
+                  {/*  </p>*/}
+                  {/*))}*/}
+                  Here should be description
                 </div>
               </div>
               <section className='offer__reviews reviews'>

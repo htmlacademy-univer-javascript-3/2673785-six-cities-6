@@ -3,8 +3,6 @@ import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
 
-const PATH_TO_IMAGES = '../../../markup/img/';
-
 type CardVariant = 'cities' | 'neighbours' | 'favorites';
 
 interface OfferCardProps {
@@ -63,7 +61,7 @@ export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMous
         <Link to={`${PageRoutes.OFFER}`}>
           <img
             className="place-card__image"
-            src={`${PATH_TO_IMAGES}${offer.images[0]}`}
+            src={offer.previewImage}
             width={imageSize.width}
             height={imageSize.height}
             alt="Place image"

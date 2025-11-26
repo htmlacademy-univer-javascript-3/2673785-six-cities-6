@@ -1,4 +1,4 @@
-import {Offer} from '../../types/offerTypes/offer.ts';
+import { Offer } from '../../types/offerTypes/offer.ts';
 
 export type SortType = 'priceLowToHigh' | 'priceHighToLow' | 'topRatedFirst' | 'popular';
 
@@ -23,7 +23,7 @@ export const getSortedOffers = (sortType: SortType, offers: Offer[]) => {
       return offersCopy.sort((a, b) => b.rating - a.rating);
 
     case 'popular':
-      return offersCopy.sort((a, b) => b.reviewIds.length - a.reviewIds.length);
+      return offersCopy.sort((a, b) => b.rating - a.rating);
 
     default:
       return offersCopy;
