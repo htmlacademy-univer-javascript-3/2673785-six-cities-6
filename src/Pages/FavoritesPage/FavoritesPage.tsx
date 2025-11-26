@@ -57,8 +57,7 @@ export const FavoritesPage: FC<FavoritesPageProps> = ({favorites, offers, isAuth
                 </div>
               </div>
               <div className="favorites__places">
-                <OfferCard variant='favorites' offer={offers.find((offer) => offer.id === favorites[0])}/>
-                <OfferCard variant='favorites' offer={offers.find((offer) => offer.id === favorites[1])}/>
+                <OfferCard variant='favorites' offer={offers.find((offer) => offer.isFavorite)}/>
               </div>
             </li>
 

@@ -1,6 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { appReducer } from '../reducers/reducers.ts';
+import {createApi} from '../api/api.ts';
+import offersSlice from '../features/offersSlice.ts';
+
+export const api = createApi();
 
 export const appStore = configureStore({
-  reducer: appReducer
+  reducer: {
+    offers: offersSlice
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: {api},
+      }
+    })
 });

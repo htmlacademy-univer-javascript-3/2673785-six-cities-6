@@ -1,13 +1,16 @@
-import {OfferCard} from '../OfferCard/OfferCard.tsx';
-import {FC, useState} from 'react';
-import {useAppSelector} from '../../hooks/redux.ts';
+import { OfferCard } from '../OfferCard/OfferCard.tsx';
+import { FC, useState } from 'react';
+import { useAppSelector } from '../../hooks/redux.ts';
 import {
   selectCurrentCity,
   selectOffersByCurrentCity,
-  selectOffersCountByCurrentCity
+  selectOffersCountByCurrentCity,
+  selectOffersLoading,
+  selectOffersError
 } from '../../selectors/selectors.ts';
-import {EmptyOffers} from './EmptyOffers.tsx';
-import {getSortedOffers, SortType, SortTypeToTitle} from './utils.ts';
+import { EmptyOffers } from './EmptyOffers.tsx';
+import { getSortedOffers, SortType, SortTypeToTitle } from './utils.ts';
+import { Spinner } from '../Spinner/Spinner.tsx';
 
 interface OffersProps {}
 
@@ -19,6 +22,8 @@ export const Offers: FC<OffersProps> = () => {
   const currentCity = useAppSelector(selectCurrentCity);
   const offers = useAppSelector(selectOffersByCurrentCity);
   const offersCount = useAppSelector(selectOffersCountByCurrentCity);
+  const isLoading = useAppSelector(selectOffersLoading);
+  const error = useAppSelector(selectOffersError);
 
   const handleOnSortSelectClick = () => {
     setSelectOpened(!selectOpened);
@@ -36,6 +41,33 @@ export const Offers: FC<OffersProps> = () => {
   const handleOfferMouseLeave = () => {
     setActiveOfferId(null);
   };
+
+  if (isLoading) {
+    return (
+      <section className="cities__places places">
+        <div className="cities__status-wrapper tabs__content">
+          <Spinner />
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="cities__places places">
+        <div className="cities__status-wrapper tabs__content">
+          <b className="cities__status">Error loading offers</b>
+          <p className="cities__status-description">{error}</p>
+          <button
+            className="cities__retry-button button"
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   const getOffers = () => {
     if (offers.length === 0) {

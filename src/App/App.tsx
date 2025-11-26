@@ -1,25 +1,33 @@
 import {FC, useEffect, useState} from 'react';
 import {MainContainer} from '../MainContainer/MainContainer.tsx';
-import {Offer} from '../types/offerTypes/offer.ts';
 import {Review} from '../types/offerTypes/review.ts';
-import {Provider, useDispatch} from 'react-redux';
-import {setOffers} from '../actions/actions.ts';
+import {Provider} from 'react-redux';
 import {appStore} from '../store/store.ts';
+import {useAppDispatch, useAppSelector} from '../hooks/redux.ts';
+import {fetchOffers} from '../features/offersThunks.ts';
+import {selectAllOffers, selectOffersLoading} from '../selectors/selectors.ts';
+import {Spinner} from '../components/Spinner/Spinner.tsx';
 
 interface AppProps {
-  offers: Offer[];
   favorites: number[];
   reviews: Review[];
 }
 
-const AppInitializer: FC<AppProps> = ({ offers, favorites, reviews }) => {
-  const dispatch = useDispatch();
+const AppInitializer: FC<AppProps> = ({ favorites, reviews }) => {
+  const dispatch = useAppDispatch();
   const [isAuthorized, setIsAuthorized] = useState(true);
+  const isLoading = useAppSelector(selectOffersLoading);
+  const offers = useAppSelector(selectAllOffers);
 
-  // Инициализируем offers в Redux store при монтировании
   useEffect(() => {
-    dispatch(setOffers(offers));
-  }, [dispatch, offers]);
+    dispatch(fetchOffers());
+  }, [dispatch]);
+
+  if (isLoading && offers.length === 0) {
+    return (
+      <Spinner />
+    );
+  }
 
   return (
     <MainContainer
