@@ -8,15 +8,20 @@ import {Offer} from '../../types/offerTypes/offer.ts';
 import {Reviews} from '../../components/Reviews/Reviews.tsx';
 import {Review} from '../../types/offerTypes/review.ts';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {selectAuthorizationStatus, selectUser} from '../../selectors/selectors.ts';
+import {logout} from '../../features/authorizationSlice.ts';
 
 interface OfferPage {
-  isAuthorized: boolean;
-  setIsAuthorized: (isAuthorized: boolean) => void;
   offers: Offer[];
   reviews: Review[];
 }
 
-export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers, reviews}) => {
+export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
+  const dispatch = useAppDispatch();
+  const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
+  const user = useAppSelector(selectUser);
+
   if (!offers || offers.length === 0) {
     return null;
   }
@@ -38,6 +43,38 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers,
 
   const points = [point];
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const getUserInfo = () => (
+    isAuthorized ? (
+      <>
+        <li className="header__nav-item user">
+          <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
+            <div className="header__avatar-wrapper user__avatar-wrapper">
+            </div>
+            <span className="header__user-name user__name">{user?.email || 'Guest'}</span>
+            <span className="header__favorite-count">
+              {isAuthorized ? offers.filter((off) => off.isFavorite).length : 0}
+            </span>
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <Link to={PageRoutes.LOGIN} className="header__nav-link">
+            <span className="header__signout" onClick={handleLogout}>Sign out</span>
+          </Link>
+        </li>
+      </>
+    ) : (
+      <li className="header__nav-item">
+        <Link className="header__nav-link" to={PageRoutes.LOGIN}>
+          <span className="header__signout">Sign in</span>
+        </Link>
+      </li>
+    )
+  );
+
   return (
     <div className='page'>
       <header className='header'>
@@ -49,28 +86,11 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers,
                   className='header__logo'
                   src='../../../markup/img/logo.svg' alt='6 cities logo' width='81' height='41'
                 />
-              </Link >
+              </Link>
             </div>
             <nav className='header__nav'>
               <ul className='header__nav-list'>
-                <li className='header__nav-item user'>
-                  <Link
-                    className='header__nav-link header__nav-link--profile'
-                    to={isAuthorized ? PageRoutes.FAVORITES : PageRoutes.LOGIN}
-                  >
-                    <div className='header__avatar-wrapper user__avatar-wrapper'>
-                    </div>
-                    <span className='header__user-name user__name'>
-                      {isAuthorized ? 'Oliver.conner@gmail.com' : 'Guest'}
-                    </span>
-                    <span className='header__favorite-count'>{isAuthorized ? 3 : 0}</span>
-                  </Link >
-                </li>
-                <li className='header__nav-item'>
-                  <Link className='header__nav-link' to={PageRoutes.LOGIN}>
-                    <span className='header__signout' onClick={() => setIsAuthorized(false)}>Sign out</span>
-                  </Link >
-                </li>
+                {getUserInfo()}
               </ul>
             </nav>
           </div>
@@ -178,7 +198,10 @@ export const OfferPage: FC<OfferPage> = ({isAuthorized, setIsAuthorized, offers,
                 <h2 className='offer__host-title'>Meet the host</h2>
                 <div className='offer__host-user user'>
                   <div className='offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper'>
-                    <img className='offer__avatar user__avatar' src='../../../markup/img/avatar-angelina.jpg' width='74' height='74' alt='HostType avatar'/>
+                    <img
+                      className='offer__avatar user__avatar' src='../../../markup/img/avatar-angelina.jpg' width='74'
+                      height='74' alt='HostType avatar'
+                    />
                   </div>
                   <span className='offer__user-name'>
                     Angelina

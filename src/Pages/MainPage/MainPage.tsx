@@ -7,15 +7,19 @@ import {useState} from 'react';
 import {Map} from '../../components/Map/Map.tsx';
 import {Cities} from '../../components/Cities/Cities.tsx';
 import {Offer} from '../../types/offerTypes/offer.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {selectAuthorizationStatus, selectUser} from '../../selectors/selectors.ts';
+import {logout} from '../../features/authorizationSlice.ts';
 
 interface MainPageProps {
   offers: Offer[];
   favoritesCount: number;
-  isAuthorized?: boolean;
-  setIsAuthorized: (isAuthorized: boolean) => void;
 }
 
-export const MainPage: FC<MainPageProps> = ({offers, favoritesCount, isAuthorized = false, setIsAuthorized}) => {
+export const MainPage: FC<MainPageProps> = ({offers, favoritesCount}) => {
+  const dispatch = useAppDispatch();
+  const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
+  const user = useAppSelector(selectUser);
   const city: City = offers.length > 0 ? {
     title: offers[0].city.name,
     lat: offers[0].city.location.latitude,
@@ -36,6 +40,36 @@ export const MainPage: FC<MainPageProps> = ({offers, favoritesCount, isAuthorize
 
   const [selectedPoint] = useState<Point>(points[0]);
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const getUserInfo = () => (
+    isAuthorized ? (
+      <>
+        <li className="header__nav-item user">
+          <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
+            <div className="header__avatar-wrapper user__avatar-wrapper">
+            </div>
+            <span className="header__user-name user__name">{user?.email || 'Guest'}</span>
+            <span className="header__favorite-count">{isAuthorized ? favoritesCount : 0}</span>
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <Link to={PageRoutes.LOGIN} className="header__nav-link">
+            <span className="header__signout" onClick={handleLogout}>Sign out</span>
+          </Link>
+        </li>
+      </>
+    ) : (
+      <li className="header__nav-item">
+        <Link className="header__nav-link" to={PageRoutes.LOGIN}>
+          <span className="header__signout">Sign in</span>
+        </Link>
+      </li>
+    )
+  );
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -48,19 +82,7 @@ export const MainPage: FC<MainPageProps> = ({offers, favoritesCount, isAuthorize
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">{isAuthorized ? 'Oliver.conner@gmail.com' : 'Guest'}</span>
-                    <span className="header__favorite-count">{isAuthorized ? favoritesCount : 0}</span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <Link to={PageRoutes.LOGIN} className="header__nav-link">
-                    <span className="header__signout" onClick={() => setIsAuthorized(false)}>Sign out</span>
-                  </Link>
-                </li>
+                {getUserInfo()}
               </ul>
             </nav>
           </div>
