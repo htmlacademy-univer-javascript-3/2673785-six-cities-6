@@ -27,12 +27,15 @@ export const Cities: FC = () => {
   ));
 
   return (
-    <div className='tabs'>
-      <section className='locations container'>
-        <ul className='locations__list tabs__list'>
-          {cities}
-        </ul>
-      </section>
-    </div>
+    <>
+      <h1 className="visually-hidden">Cities</h1>
+      <div className='tabs'>
+        <section className='locations container'>
+          <ul className='locations__list tabs__list'>
+            {cities}
+          </ul>
+        </section>
+      </div>
+    </>
   );
 };

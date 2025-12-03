@@ -1,37 +1,33 @@
 import {FC} from 'react';
-import {Link} from 'react-router-dom';
-import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 import {ReviewForm} from '../../components/ReviewForm/ReviewForm.tsx';
 import {Map} from '../../components/Map/Map.tsx';
 import {City, Point} from '../../types/types.ts';
-import {Offer} from '../../types/offerTypes/offer.ts';
 import {Reviews} from '../../components/Reviews/Reviews.tsx';
 import {Review} from '../../types/offerTypes/review.ts';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
-import {selectAuthorizationStatus, selectUser} from '../../selectors/selectors.ts';
-import {logout} from '../../features/authorizationSlice.ts';
+import {useAppSelector} from '../../hooks/redux.ts';
+import {selectAllOffers, selectCurrentOffer} from '../../selectors/selectors.ts';
+import {MainHeader} from '../../components/MainHeader/MainHeader.tsx';
+import {OfferPageImages} from "./OfferPageImages.tsx";
 
 interface OfferPage {
-  offers: Offer[];
   reviews: Review[];
 }
 
-export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
-  const dispatch = useAppDispatch();
-  const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
-  const user = useAppSelector(selectUser);
-
-  if (!offers || offers.length === 0) {
-    return null;
-  }
-  const offer = offers[0];
+export const OfferPage: FC<OfferPage> = ({reviews}) => {
+  const offers = useAppSelector(selectAllOffers);
+  const offer = useAppSelector(selectCurrentOffer);
   const neighbourOffers = offers.slice(1);
 
+  if (!offer) {
+    return;
+  }
+
+  const offerCity = offer.city;
   const city: City = {
-    title: 'Amsterdam',
-    lat: offer.location.latitude,
-    lng: offer.location.longitude,
+    title: offerCity.name,
+    lat: offerCity.location.latitude,
+    lng: offerCity.location.longitude,
     zoom: 10,
   };
 
@@ -41,86 +37,19 @@ export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
     lng: offer.location.longitude,
   };
 
-  const points = [point];
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
-  const getUserInfo = () => (
-    isAuthorized ? (
-      <>
-        <li className="header__nav-item user">
-          <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
-            <div className="header__avatar-wrapper user__avatar-wrapper">
-            </div>
-            <span className="header__user-name user__name">{user?.email || 'Guest'}</span>
-            <span className="header__favorite-count">
-              {isAuthorized ? offers.filter((off) => off.isFavorite).length : 0}
-            </span>
-          </Link>
-        </li>
-        <li className="header__nav-item">
-          <Link to={PageRoutes.LOGIN} className="header__nav-link">
-            <span className="header__signout" onClick={handleLogout}>Sign out</span>
-          </Link>
-        </li>
-      </>
-    ) : (
-      <li className="header__nav-item">
-        <Link className="header__nav-link" to={PageRoutes.LOGIN}>
-          <span className="header__signout">Sign in</span>
-        </Link>
-      </li>
-    )
-  );
+  const points = neighbourOffers.map((off) => ({
+    title: off.title,
+    lat: offer.location.latitude,
+    lng: offer.location.longitude,
+  }));
 
   return (
     <div className='page'>
-      <header className='header'>
-        <div className='container'>
-          <div className='header__wrapper'>
-            <div className='header__left'>
-              <Link className='header__logo-link' to={PageRoutes.MAIN}>
-                <img
-                  className='header__logo'
-                  src='../../../markup/img/logo.svg' alt='6 cities logo' width='81' height='41'
-                />
-              </Link>
-            </div>
-            <nav className='header__nav'>
-              <ul className='header__nav-list'>
-                {getUserInfo()}
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <MainHeader/>
 
       <main className='page__main page__main--offer'>
         <section className='offer'>
-          <div className='offer__gallery-container container'>
-            <div className='offer__gallery'>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/room.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-01.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-02.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-03.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/studio-01.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-01.jpg' alt='Photo studio'/>
-              </div>
-            </div>
-          </div>
+          <OfferPageImages/>
           <div className='offer__container container'>
             <div className='offer__wrapper'>
               <div className='offer__mark'>

@@ -1,5 +1,13 @@
+export type CityType =
+  | 'Paris'
+  | 'Amsterdam'
+  | 'Cologne'
+  | 'Brussels'
+  | 'Hamburg'
+  | 'Dusseldorf';
+
 export interface City {
-  name: string;
+  name: CityType;
   location: {
     latitude: number;
     longitude: number;

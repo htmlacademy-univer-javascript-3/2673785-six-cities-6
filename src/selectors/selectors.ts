@@ -35,6 +35,11 @@ export const selectAllOffers = createSelector(
   (offersState) => offersState.offers
 );
 
+export const selectCurrentOffer = createSelector(
+  selectOffersState,
+  (offersState) => offersState.selectedOffer
+);
+
 export const selectOffersLoading = createSelector(
   selectOffersState,
   (offersState) => offersState.isLoading
