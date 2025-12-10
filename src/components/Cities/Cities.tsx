@@ -3,12 +3,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { setCity } from '../../features/offersSlice.ts';
 import { CITIES } from '../../constants/constants.ts';
 import { selectCurrentCity } from '../../selectors/selectors.ts';
+import {CityType} from '../../types/offerTypes/offer.ts';
 
 export const CitiesComponent: FC = () => {
   const dispatch = useAppDispatch();
   const currentCity = useAppSelector(selectCurrentCity);
 
-  const handleOnCityClick = useCallback((city: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+  const handleOnCityClick = useCallback((city: CityType) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     dispatch(setCity(city));
   }, [dispatch]);

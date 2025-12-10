@@ -58,7 +58,6 @@ export const selectOffersError = createSelector(
   (offersState) => offersState.error
 );
 
-
 export const selectOffersByCurrentCity = createSelector(
   [selectAllOffers, selectCurrentCity],
   (offers, city) => offers.filter((offer) => offer.city.name === city)
@@ -69,10 +68,20 @@ export const selectOffersCountByCurrentCity = createSelector(
   (offers) => offers.length
 );
 
+
+// Избранное
+export const selectFavorites = createSelector(
+  selectOffersState,
+  (offersState) => offersState.favorites || []
+);
+
 export const selectFavoritesByCity = createSelector(
-  selectAllOffers,
-  (offers) => {
-    const favorites = offers.filter((offer) => offer.isFavorite);
+  selectFavorites,
+  (favorites) => {
+    if (!favorites || favorites.length === 0) {
+      return {};
+    }
+
     return favorites.reduce<Record<string, typeof favorites>>((acc, offer) => {
       const city = offer.city.name;
       if (!acc[city]) {
@@ -85,6 +94,16 @@ export const selectFavoritesByCity = createSelector(
 );
 
 export const selectFavoritesCount = createSelector(
-  selectAllOffers,
-  (offers) => offers.filter((offer) => offer.isFavorite).length
+  selectFavorites,
+  (favorites) => favorites.length
+);
+
+export const selectFavoritesLoading = createSelector(
+  selectOffersState,
+  (offersState) => offersState.favoritesLoading
+);
+
+export const selectFavoritesError = createSelector(
+  selectOffersState,
+  (offersState) => offersState.favoritesError
 );
