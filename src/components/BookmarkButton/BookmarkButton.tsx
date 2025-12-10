@@ -1,6 +1,9 @@
-import {FC, MouseEvent} from 'react';
-import {useAppDispatch} from '../../hooks/redux.ts';
-import {toggleFavorite} from '../../features/offersSlice.ts';
+import { FC, MouseEvent, memo, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
+import { useNavigate } from 'react-router-dom';
+import { PageRoutes } from '../../constants/PageRoutes/PageRoutes.ts';
+import { selectAuthorizationStatus } from '../../selectors/selectors.ts';
+import { toggleFavorite as toggleFavoriteThunk } from '../../features/favoritesThunks.ts';
 
 interface BookmarkButtonProps {
   offerId: string;
@@ -9,14 +12,31 @@ interface BookmarkButtonProps {
   className?: string;
 }
 
-export const BookmarkButton: FC<BookmarkButtonProps> = ({offerId, isFavorite, size = 'small', className = ''}) => {
+export const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, size = 'small', className = ''}) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
 
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleFavorite(offerId));
-  };
+
+    if (!isAuthorized) {
+      navigate(PageRoutes.LOGIN, {
+        state: { from: window.location.pathname }
+      });
+      return;
+    }
+
+    (async () => {
+      try {
+        await dispatch(toggleFavoriteThunk({
+          offerId,
+          isFavorite
+        })).unwrap();
+      } catch (error: unknown) { /* empty */ }
+    })();
+  }, [dispatch, offerId, isFavorite, isAuthorized, navigate]);
 
   const buttonClass = size === 'large'
     ? 'offer__bookmark-button'
@@ -38,6 +58,7 @@ export const BookmarkButton: FC<BookmarkButtonProps> = ({offerId, isFavorite, si
       type="button"
       onClick={handleClick}
       aria-label={buttonText}
+      title={isAuthorized ? buttonText : 'Sign in to add to favorites'}
     >
       <svg
         className={`${size === 'large' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'}`}
@@ -50,3 +71,5 @@ export const BookmarkButton: FC<BookmarkButtonProps> = ({offerId, isFavorite, si
     </button>
   );
 };
+
+export const BookmarkButton = memo(BookmarkButtonComponent);

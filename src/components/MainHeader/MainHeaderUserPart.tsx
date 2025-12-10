@@ -1,6 +1,10 @@
-import {FC, memo, useCallback, useMemo} from 'react';
+import {FC, memo, useCallback} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
-import {selectAllOffers, selectAuthorizationStatus, selectUser} from '../../selectors/selectors.ts';
+import {
+  selectAuthorizationStatus,
+  selectFavoritesCount,
+  selectUser
+} from '../../selectors/selectors.ts';
 import {logout} from '../../features/authorizationSlice.ts';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
@@ -9,12 +13,7 @@ export const MainHeaderUserPartComponent: FC = () => {
   const dispatch = useAppDispatch();
   const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
   const user = useAppSelector(selectUser);
-  const offers = useAppSelector(selectAllOffers);
-
-  const favoriteCount = useMemo(
-    () =>
-      isAuthorized ? offers.filter((off) => off.isFavorite).length : 0, [isAuthorized, offers]
-  );
+  const favoritesCount = useAppSelector(selectFavoritesCount);
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
@@ -25,10 +24,19 @@ export const MainHeaderUserPartComponent: FC = () => {
       <li className='header__nav-item user'>
         <Link to={PageRoutes.FAVORITES} className='header__nav-link header__nav-link--profile'>
           <div className='header__avatar-wrapper user__avatar-wrapper'>
+            {user?.avatarUrl && (
+              <img
+                className="header__avatar user__avatar"
+                src={user.avatarUrl}
+                width="20"
+                height="20"
+                alt={user.email}
+              />
+            )}
           </div>
           <span className='header__user-name user__name'>{user?.email || 'Guest'}</span>
           <span className='header__favorite-count'>
-            {favoriteCount}
+            {favoritesCount}
           </span>
         </Link>
       </li>
