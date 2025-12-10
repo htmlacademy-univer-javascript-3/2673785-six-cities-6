@@ -1,6 +1,6 @@
-import { OfferCard } from '../OfferCard/OfferCard.tsx';
-import { FC, useState } from 'react';
-import { useAppSelector } from '../../hooks/redux.ts';
+import {OfferCard} from '../OfferCard/OfferCard.tsx';
+import {FC, memo, useCallback, useMemo, useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
 import {
   selectCurrentCity,
   selectOffersByCurrentCity,
@@ -8,16 +8,22 @@ import {
   selectOffersLoading,
   selectOffersError
 } from '../../selectors/selectors.ts';
-import { EmptyOffers } from './EmptyOffers.tsx';
-import { getSortedOffers, SortType, SortTypeToTitle } from './utils.ts';
-import { Spinner } from '../Spinner/Spinner.tsx';
+import {EmptyOffers} from './EmptyOffers.tsx';
+import {SortType, SortTypeToTitle, getSortedOffers} from './utils.ts';
+import {Spinner} from '../Spinner/Spinner.tsx';
+import {setOffer} from '../../features/offersSlice.ts';
+import {Offer} from '../../types/offerTypes/offer.ts';
+import {SortOptions} from './SortOptions.tsx';
 
-interface OffersProps {}
+interface OffersProps {
+}
 
-export const Offers: FC<OffersProps> = () => {
+const OffersComponent: FC<OffersProps> = () => {
   const [sortType, setSortType] = useState<SortType>('popular');
   const [selectOpened, setSelectOpened] = useState(false);
-  const [, setActiveOfferId] = useState<number | null>(null);
+  const [, setActiveOfferId] = useState<string | null>(null);
+
+  const dispatch = useAppDispatch();
 
   const currentCity = useAppSelector(selectCurrentCity);
   const offers = useAppSelector(selectOffersByCurrentCity);
@@ -25,16 +31,16 @@ export const Offers: FC<OffersProps> = () => {
   const isLoading = useAppSelector(selectOffersLoading);
   const error = useAppSelector(selectOffersError);
 
-  const handleOnSortSelectClick = () => {
-    setSelectOpened(!selectOpened);
-  };
+  const handleOnSortSelectClick = useCallback(() => {
+    setSelectOpened((prev) => !prev);
+  }, []);
 
-  const handleSetSortType = (type: SortType) => {
+  const handleSetSortType = useCallback((type: SortType) => {
     setSortType(type);
     setSelectOpened(false);
-  };
+  }, []);
 
-  const handleOfferMouseEnter = (offerId: number) => {
+  const handleOfferMouseEnter = (offerId: string) => {
     setActiveOfferId(offerId);
   };
 
@@ -42,11 +48,36 @@ export const Offers: FC<OffersProps> = () => {
     setActiveOfferId(null);
   };
 
+  const handleOfferClick = useCallback((selectedOffer: Offer) => {
+    dispatch(setOffer(selectedOffer));
+  }, [dispatch]);
+
+  const sortedOffers = useMemo(
+    () =>
+      getSortedOffers(sortType, offers),
+    [sortType, offers]
+  );
+
+  const offersList = useMemo(
+    () =>
+      sortedOffers.map((offer) => (
+        <OfferCard
+          offer={offer}
+          key={offer.id}
+          variant={'cities'}
+          onClick={() => handleOfferClick(offer)}
+          onMouseLeave={handleOfferMouseLeave}
+          onMouseEnter={() => handleOfferMouseEnter(offer.id)}
+        />
+      )),
+    [sortedOffers, handleOfferClick]
+  );
+
   if (isLoading) {
     return (
       <section className="cities__places places">
         <div className="cities__status-wrapper tabs__content">
-          <Spinner />
+          <Spinner/>
         </div>
       </section>
     );
@@ -69,21 +100,9 @@ export const Offers: FC<OffersProps> = () => {
     );
   }
 
-  const getOffers = () => {
-    if (offers.length === 0) {
-      return <EmptyOffers currentCity={currentCity}/>;
-    }
-
-    return getSortedOffers(sortType, offers).map((offer) => (
-      <OfferCard
-        offer={offer}
-        key={offer.id}
-        variant={'cities'}
-        onMouseEnter={() => handleOfferMouseEnter(offer.id)}
-        onMouseLeave={handleOfferMouseLeave}
-      />
-    ));
-  };
+  if (offers.length === 0) {
+    return <EmptyOffers currentCity={currentCity}/>;
+  }
 
   return (
     <section className='cities__places places'>
@@ -98,44 +117,14 @@ export const Offers: FC<OffersProps> = () => {
           </svg>
         </span>
         {selectOpened && (
-          <ul className='places__options places__options--custom places__options--opened'>
-            <li
-              className={`places__option ${sortType === 'popular' && 'places__option--active'}`}
-              onClick={() => handleSetSortType('popular')}
-              tabIndex={0}
-            >
-              Popular
-            </li>
-
-            <li
-              className={`places__option ${sortType === 'priceLowToHigh' && 'places__option--active'}`}
-              onClick={() => handleSetSortType('priceLowToHigh')}
-              tabIndex={0}
-            >
-              Price: low to high
-            </li>
-
-            <li
-              className={`places__option ${sortType === 'priceHighToLow' && 'places__option--active'}`}
-              onClick={() => handleSetSortType('priceHighToLow')}
-              tabIndex={0}
-            >
-              Price: high to low
-            </li>
-
-            <li
-              className={`places__option ${sortType === 'topRatedFirst' && 'places__option--active'}`}
-              onClick={() => handleSetSortType('topRatedFirst')}
-              tabIndex={0}
-            >
-              Top rated first
-            </li>
-          </ul>
+          <SortOptions sortType={sortType} selectOpened={selectOpened} onSelectType={handleSetSortType}/>
         )}
       </form>
       <div className='cities__places-list places__list tabs__content'>
-        {getOffers()}
+        {offersList}
       </div>
     </section>
   );
 };
+
+export const Offers = memo(OffersComponent);

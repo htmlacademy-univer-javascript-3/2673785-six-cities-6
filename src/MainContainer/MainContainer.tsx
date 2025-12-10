@@ -25,7 +25,7 @@ export const MainContainer: FC<MainContainerProps> = ({reviews}) => (
         </PrivateRoute>
       }
     />
-    <Route path={PageRoutes.OFFER} element={<OfferPage reviews={reviews}/>}/>
+    <Route path={`${PageRoutes.OFFER}/:id`} element={<OfferPage reviews={reviews}/>}/>
     <Route path={PageRoutes.NOT_FOUND} element={<ErrorPage/>}/>
   </Routes>
 );

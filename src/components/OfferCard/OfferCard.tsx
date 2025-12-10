@@ -2,24 +2,23 @@ import type {FC} from 'react';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
+import {BookmarkButton} from '../BookmarkButton/BookmarkButton.tsx';
+import {memo, useMemo} from 'react';
 
 type CardVariant = 'cities' | 'neighbours' | 'favorites';
 
 interface OfferCardProps {
-  offer?: Offer;
+  offer: Offer;
   variant?: CardVariant;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onClick: () => void;
 }
 
-export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMouseEnter, onMouseLeave}) => {
-  if (!offer) {
-    return;
-  }
+const OfferCardComponent: FC<OfferCardProps> = ({offer, variant = 'cities', onMouseEnter, onMouseLeave, onClick}) => {
+  const rating = useMemo(() => `${offer.rating * 20}%`, [offer.rating]);
 
-  const rating = `${offer.rating * 20}%`;
-
-  const getCardClassName = () => {
+  const cardClassName = useMemo(() => {
     switch (variant) {
       case 'neighbours':
         return 'near-places__card place-card';
@@ -28,9 +27,9 @@ export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMous
       default:
         return 'cities__card place-card';
     }
-  };
+  }, [variant]);
 
-  const getImageWrapperClassName = () => {
+  const imageWrapperClassName = useMemo(() => {
     switch (variant) {
       case 'neighbours':
         return 'near-places__image-wrapper place-card__image-wrapper';
@@ -39,26 +38,24 @@ export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMous
       default:
         return 'cities__image-wrapper place-card__image-wrapper';
     }
-  };
+  }, [variant]);
 
-  const getImageSize = () => {
+  const imageSize = useMemo(() => {
     if (variant === 'favorites') {
       return {width: '150', height: '110'};
     }
     return {width: '260', height: '200'};
-  };
-
-  const imageSize = getImageSize();
+  }, [variant]);
 
   return (
-    <article className={getCardClassName()} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <article className={cardClassName} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onClick}>
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={getImageWrapperClassName()}>
-        <Link to={`${PageRoutes.OFFER}`}>
+      <div className={imageWrapperClassName}>
+        <Link to={`${PageRoutes.OFFER}/${offer.id}`}>
           <img
             className="place-card__image"
             src={offer.previewImage}
@@ -74,17 +71,7 @@ export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMous
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            className={`place-card__bookmark-button ${offer.isFavorite ? 'place-card__bookmark-button--active' : ''} button`}
-            type="button"
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">
-              {offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}
-            </span>
-          </button>
+          <BookmarkButton offerId={offer.id} isFavorite={offer.isFavorite} size={'small'}/>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
@@ -102,3 +89,5 @@ export const OfferCard: FC<OfferCardProps> = ({offer, variant = 'cities', onMous
     </article>
   );
 };
+
+export const OfferCard = memo(OfferCardComponent);

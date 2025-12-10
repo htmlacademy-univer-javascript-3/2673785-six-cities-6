@@ -31,6 +31,14 @@ const offersSlice = createSlice({
     setOffer: (state, action: PayloadAction<Offer>) => {
       state.selectedOffer = action.payload;
     },
+    toggleFavorite: (state, action: PayloadAction<string>) => {
+      const offerId = action.payload;
+      const offer = state.offers.find((off) => off.id === offerId);
+
+      if (offer) {
+        offer.isFavorite = !offer.isFavorite;
+      }
+    },
     clearError: (state) => {
       state.error = null;
     },
@@ -52,5 +60,5 @@ const offersSlice = createSlice({
   },
 });
 
-export const { setCity, setOffers, setOffer, clearError } = offersSlice.actions;
+export const { setCity, setOffers, setOffer, toggleFavorite, clearError } = offersSlice.actions;
 export default offersSlice.reducer;

@@ -23,4 +23,5 @@ export const OfferPageImages: FC = () => (
       </div>
     </div>
   </div>
-)
+);
+

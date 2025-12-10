@@ -16,7 +16,7 @@ export interface City {
 }
 
 export interface Offer {
-  id: number;
+  id: string;
   title: string;
   price: number;
   rating: number;

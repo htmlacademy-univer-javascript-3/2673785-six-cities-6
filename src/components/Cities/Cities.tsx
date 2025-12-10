@@ -1,19 +1,19 @@
-import { FC, MouseEvent } from 'react';
+import {FC, memo, MouseEvent, useCallback, useMemo} from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
 import { setCity } from '../../features/offersSlice.ts';
 import { CITIES } from '../../constants/constants.ts';
 import { selectCurrentCity } from '../../selectors/selectors.ts';
 
-export const Cities: FC = () => {
+export const CitiesComponent: FC = () => {
   const dispatch = useAppDispatch();
   const currentCity = useAppSelector(selectCurrentCity);
 
-  const handleOnCityClick = (city: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+  const handleOnCityClick = useCallback((city: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     dispatch(setCity(city));
-  };
+  }, [dispatch]);
 
-  const cities = CITIES.map((city) => (
+  const cities = useMemo(() => CITIES.map((city) => (
     <li className='locations__item' key={city}>
       <a
         className={`locations__item-link tabs__item ${
@@ -24,7 +24,7 @@ export const Cities: FC = () => {
         <span>{city}</span>
       </a>
     </li>
-  ));
+  )), [currentCity, handleOnCityClick]);
 
   return (
     <>
@@ -39,3 +39,5 @@ export const Cities: FC = () => {
     </>
   );
 };
+
+export const Cities = memo(CitiesComponent);

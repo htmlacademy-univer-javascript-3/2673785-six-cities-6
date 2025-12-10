@@ -1,47 +1,39 @@
-import {FC} from 'react';
-import {Link} from 'react-router-dom';
-import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
-import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
-import {useAppSelector} from '../../hooks/redux.ts';
-import {selectAllOffers} from '../../selectors/selectors.ts';
-import {getFavoritesByCity} from './utils.ts';
+import {FC, memo, useCallback} from 'react';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {selectFavoritesByCity, selectFavoritesCount} from '../../selectors/selectors.ts';
+import {setOffer} from '../../features/offersSlice.ts';
+import {Offer} from '../../types/offerTypes/offer.ts';
+import {CitySection} from '../../components/CitySection/CitySection.tsx';
 
-export const FavoritesByCity: FC = () => {
-  const offers = useAppSelector(selectAllOffers);
-  const favorites = offers.filter((offer) => offer.isFavorite);
+export const FavoritesByCityComponent: FC = () => {
+  const favoritesByCity = useAppSelector(selectFavoritesByCity);
+  const favoritesCount = useAppSelector(selectFavoritesCount);
+  const dispatch = useAppDispatch();
 
-  const favoritesByCity = getFavoritesByCity(favorites);
+  const handleOfferClick = useCallback((selectedOffer: Offer) => {
+    dispatch(setOffer(selectedOffer));
+  }, [dispatch]);
 
-  const favoritesComponent =
-    Object.entries(favoritesByCity)
-      .map(([city, offersByCity]) =>
-        offersByCity.length > 0 ? (
-          <li className='favorites__locations-items' key={city}>
-            <div className='favorites__locations locations locations--current'>
-              <div className='locations__item'>
-                <Link className='locations__item-link' to={PageRoutes.FAVORITES}>
-                  <span>{city}</span>
-                </Link>
-              </div>
-            </div>
-            <div className='favorites__places'>
-              {offersByCity.map((offer) => (
-                <OfferCard variant='favorites' offer={offer} key={offer.id}/>
-              ))}
-            </div>
-          </li>
-        ) : null
-      );
+  const citySections = Object.entries(favoritesByCity).map(([city, offers]) =>
+    offers.length > 0 ? (
+      <CitySection
+        key={city}
+        city={city}
+        offers={offers}
+        onOfferClick={handleOfferClick}
+      />
+    ) : null
+  );
 
   return (
     <main className='page__main page__main--favorites'>
       <div className='page__favorites-container container'>
         <section className='favorites'>
-          {favorites.length > 0 ? (
+          {favoritesCount > 0 ? (
             <>
               <h1 className='favorites__title'>Saved listing</h1>
               <ul className='favorites__list'>
-                {favoritesComponent}
+                {citySections}
               </ul>
             </>
           ) : (
@@ -52,3 +44,5 @@ export const FavoritesByCity: FC = () => {
     </main>
   );
 };
+
+export const FavoritesByCity = memo(FavoritesByCityComponent);

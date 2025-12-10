@@ -1,27 +1,49 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {ReviewForm} from '../../components/ReviewForm/ReviewForm.tsx';
 import {Map} from '../../components/Map/Map.tsx';
 import {City, Point} from '../../types/types.ts';
 import {Reviews} from '../../components/Reviews/Reviews.tsx';
 import {Review} from '../../types/offerTypes/review.ts';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
-import {useAppSelector} from '../../hooks/redux.ts';
-import {selectAllOffers, selectCurrentOffer} from '../../selectors/selectors.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {selectAllOffers, selectOfferById} from '../../selectors/selectors.ts';
 import {MainHeader} from '../../components/MainHeader/MainHeader.tsx';
-import {OfferPageImages} from "./OfferPageImages.tsx";
+import {OfferPageImages} from './OfferPageImages.tsx';
+import {Offer} from '../../types/offerTypes/offer.ts';
+import {setOffer} from '../../features/offersSlice.ts';
+import {useParams} from 'react-router-dom';
+import {BookmarkButton} from '../../components/BookmarkButton/BookmarkButton.tsx';
 
 interface OfferPage {
   reviews: Review[];
 }
 
 export const OfferPage: FC<OfferPage> = ({reviews}) => {
+  const dispatch = useAppDispatch();
+  const {id} = useParams<{ id: string }>();
+
+  const selectOfferByIdWithMemo = useMemo(() => selectOfferById(), []);
+  const offer = useAppSelector((state) => selectOfferByIdWithMemo(state, id));
   const offers = useAppSelector(selectAllOffers);
-  const offer = useAppSelector(selectCurrentOffer);
-  const neighbourOffers = offers.slice(1);
 
   if (!offer) {
-    return;
+    return (
+      <div className={'page'}>
+        <MainHeader/>
+
+        <main className='page__main page__main--offer'>
+          <div className="container">
+            <h1 style={{margin: 'auto', textAlign: 'center'}}>
+              Не удалось найти страницу предложения,<br/>вернитесь на главную страницу
+            </h1>
+          </div>
+        </main>
+      </div>
+    );
   }
+
+  const neighbourOffers = offers.filter((off) => off.city.name === offer.city.name && off.id !== offer.id);
+  const rating = `${offer.rating * 20}%`;
 
   const offerCity = offer.city;
   const city: City = {
@@ -39,9 +61,14 @@ export const OfferPage: FC<OfferPage> = ({reviews}) => {
 
   const points = neighbourOffers.map((off) => ({
     title: off.title,
-    lat: offer.location.latitude,
-    lng: offer.location.longitude,
+    lat: off.location.latitude,
+    lng: off.location.longitude,
   }));
+
+  const handleOfferClick = (selectedOffer: Offer) => {
+    dispatch(setOffer(selectedOffer));
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };
 
   return (
     <div className='page'>
@@ -52,30 +79,27 @@ export const OfferPage: FC<OfferPage> = ({reviews}) => {
           <OfferPageImages/>
           <div className='offer__container container'>
             <div className='offer__wrapper'>
-              <div className='offer__mark'>
-                <span>Premium</span>
-              </div>
+              {offer.isPremium && (
+                <div className='offer__mark'>
+                  <span>Premium</span>
+                </div>
+              )}
               <div className='offer__name-wrapper'>
                 <h1 className='offer__name'>
-                  Beautiful &amp; luxurious studio at great location
+                  {offer.title}
                 </h1>
-                <button className='offer__bookmark-button button' type='button'>
-                  <svg className='offer__bookmark-icon' width='31' height='33'>
-                    <use xlinkHref='#icon-bookmark'></use>
-                  </svg>
-                  <span className='visually-hidden'>To bookmarks</span>
-                </button>
+                <BookmarkButton offerId={offer.id} isFavorite={offer.isFavorite} size={'large'}/>
               </div>
               <div className='offer__rating rating'>
                 <div className='offer__stars rating__stars'>
-                  <span style={{width: '80%'}}></span>
+                  <span style={{width: rating}}></span>
                   <span className='visually-hidden'>Rating</span>
                 </div>
-                <span className='offer__rating-value rating__value'>4.8</span>
+                <span className='offer__rating-value rating__value'>{offer.rating}</span>
               </div>
               <ul className='offer__features'>
                 <li className='offer__feature offer__feature--entire'>
-                  Apartment
+                  {offer.type}
                 </li>
                 <li className='offer__feature offer__feature--bedrooms'>
                   3 Bedrooms
@@ -85,7 +109,7 @@ export const OfferPage: FC<OfferPage> = ({reviews}) => {
                 </li>
               </ul>
               <div className='offer__price'>
-                <b className='offer__price-value'>&euro;120</b>
+                <b className='offer__price-value'>&euro;{offer.price}</b>
                 <span className='offer__price-text'>&nbsp;night</span>
               </div>
               <div className='offer__inside'>
@@ -163,7 +187,12 @@ export const OfferPage: FC<OfferPage> = ({reviews}) => {
             <h2 className='near-places__title'>Other places in the neighbourhood</h2>
             <div className='near-places__list places__list'>
               {neighbourOffers.map((neighbourOffer) => (
-                <OfferCard offer={neighbourOffer} variant={'neighbours'} key={neighbourOffer.id}/>
+                <OfferCard
+                  offer={neighbourOffer}
+                  variant={'neighbours'}
+                  onClick={() => handleOfferClick(neighbourOffer)}
+                  key={neighbourOffer.id}
+                />
               ))}
             </div>
           </section>
