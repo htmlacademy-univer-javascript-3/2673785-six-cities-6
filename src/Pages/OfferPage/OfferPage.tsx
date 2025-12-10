@@ -1,37 +1,55 @@
-import {FC} from 'react';
-import {Link} from 'react-router-dom';
-import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
+import {FC, useMemo} from 'react';
 import {ReviewForm} from '../../components/ReviewForm/ReviewForm.tsx';
 import {Map} from '../../components/Map/Map.tsx';
 import {City, Point} from '../../types/types.ts';
-import {Offer} from '../../types/offerTypes/offer.ts';
 import {Reviews} from '../../components/Reviews/Reviews.tsx';
 import {Review} from '../../types/offerTypes/review.ts';
 import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
-import {selectAuthorizationStatus, selectUser} from '../../selectors/selectors.ts';
-import {logout} from '../../features/authorizationSlice.ts';
+import {selectAllOffers, selectOfferById} from '../../selectors/selectors.ts';
+import {MainHeader} from '../../components/MainHeader/MainHeader.tsx';
+import {OfferPageImages} from './OfferPageImages.tsx';
+import {Offer} from '../../types/offerTypes/offer.ts';
+import {setOffer} from '../../features/offersSlice.ts';
+import {useParams} from 'react-router-dom';
+import {BookmarkButton} from '../../components/BookmarkButton/BookmarkButton.tsx';
 
 interface OfferPage {
-  offers: Offer[];
   reviews: Review[];
 }
 
-export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
+export const OfferPage: FC<OfferPage> = ({reviews}) => {
   const dispatch = useAppDispatch();
-  const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
-  const user = useAppSelector(selectUser);
+  const {id} = useParams<{ id: string }>();
 
-  if (!offers || offers.length === 0) {
-    return null;
+  const selectOfferByIdWithMemo = useMemo(() => selectOfferById(), []);
+  const offer = useAppSelector((state) => selectOfferByIdWithMemo(state, id));
+  const offers = useAppSelector(selectAllOffers);
+
+  if (!offer) {
+    return (
+      <div className={'page'}>
+        <MainHeader/>
+
+        <main className='page__main page__main--offer'>
+          <div className="container">
+            <h1 style={{margin: 'auto', textAlign: 'center'}}>
+              Не удалось найти страницу предложения,<br/>вернитесь на главную страницу
+            </h1>
+          </div>
+        </main>
+      </div>
+    );
   }
-  const offer = offers[0];
-  const neighbourOffers = offers.slice(1);
 
+  const neighbourOffers = offers.filter((off) => off.city.name === offer.city.name && off.id !== offer.id);
+  const rating = `${offer.rating * 20}%`;
+
+  const offerCity = offer.city;
   const city: City = {
-    title: 'Amsterdam',
-    lat: offer.location.latitude,
-    lng: offer.location.longitude,
+    title: offerCity.name,
+    lat: offerCity.location.latitude,
+    lng: offerCity.location.longitude,
     zoom: 10,
   };
 
@@ -41,112 +59,47 @@ export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
     lng: offer.location.longitude,
   };
 
-  const points = [point];
+  const points = neighbourOffers.map((off) => ({
+    title: off.title,
+    lat: off.location.latitude,
+    lng: off.location.longitude,
+  }));
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleOfferClick = (selectedOffer: Offer) => {
+    dispatch(setOffer(selectedOffer));
+    window.scrollTo({top: 0, behavior: 'smooth'});
   };
-
-  const getUserInfo = () => (
-    isAuthorized ? (
-      <>
-        <li className="header__nav-item user">
-          <Link to={PageRoutes.FAVORITES} className="header__nav-link header__nav-link--profile">
-            <div className="header__avatar-wrapper user__avatar-wrapper">
-            </div>
-            <span className="header__user-name user__name">{user?.email || 'Guest'}</span>
-            <span className="header__favorite-count">
-              {isAuthorized ? offers.filter((off) => off.isFavorite).length : 0}
-            </span>
-          </Link>
-        </li>
-        <li className="header__nav-item">
-          <Link to={PageRoutes.LOGIN} className="header__nav-link">
-            <span className="header__signout" onClick={handleLogout}>Sign out</span>
-          </Link>
-        </li>
-      </>
-    ) : (
-      <li className="header__nav-item">
-        <Link className="header__nav-link" to={PageRoutes.LOGIN}>
-          <span className="header__signout">Sign in</span>
-        </Link>
-      </li>
-    )
-  );
 
   return (
     <div className='page'>
-      <header className='header'>
-        <div className='container'>
-          <div className='header__wrapper'>
-            <div className='header__left'>
-              <Link className='header__logo-link' to={PageRoutes.MAIN}>
-                <img
-                  className='header__logo'
-                  src='../../../markup/img/logo.svg' alt='6 cities logo' width='81' height='41'
-                />
-              </Link>
-            </div>
-            <nav className='header__nav'>
-              <ul className='header__nav-list'>
-                {getUserInfo()}
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <MainHeader/>
 
       <main className='page__main page__main--offer'>
         <section className='offer'>
-          <div className='offer__gallery-container container'>
-            <div className='offer__gallery'>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/room.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-01.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-02.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-03.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/studio-01.jpg' alt='Photo studio'/>
-              </div>
-              <div className='offer__image-wrapper'>
-                <img className='offer__image' src='../../../markup/img/apartment-01.jpg' alt='Photo studio'/>
-              </div>
-            </div>
-          </div>
+          <OfferPageImages/>
           <div className='offer__container container'>
             <div className='offer__wrapper'>
-              <div className='offer__mark'>
-                <span>Premium</span>
-              </div>
+              {offer.isPremium && (
+                <div className='offer__mark'>
+                  <span>Premium</span>
+                </div>
+              )}
               <div className='offer__name-wrapper'>
                 <h1 className='offer__name'>
-                  Beautiful &amp; luxurious studio at great location
+                  {offer.title}
                 </h1>
-                <button className='offer__bookmark-button button' type='button'>
-                  <svg className='offer__bookmark-icon' width='31' height='33'>
-                    <use xlinkHref='#icon-bookmark'></use>
-                  </svg>
-                  <span className='visually-hidden'>To bookmarks</span>
-                </button>
+                <BookmarkButton offerId={offer.id} isFavorite={offer.isFavorite} size={'large'}/>
               </div>
               <div className='offer__rating rating'>
                 <div className='offer__stars rating__stars'>
-                  <span style={{width: '80%'}}></span>
+                  <span style={{width: rating}}></span>
                   <span className='visually-hidden'>Rating</span>
                 </div>
-                <span className='offer__rating-value rating__value'>4.8</span>
+                <span className='offer__rating-value rating__value'>{offer.rating}</span>
               </div>
               <ul className='offer__features'>
                 <li className='offer__feature offer__feature--entire'>
-                  Apartment
+                  {offer.type}
                 </li>
                 <li className='offer__feature offer__feature--bedrooms'>
                   3 Bedrooms
@@ -156,7 +109,7 @@ export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
                 </li>
               </ul>
               <div className='offer__price'>
-                <b className='offer__price-value'>&euro;120</b>
+                <b className='offer__price-value'>&euro;{offer.price}</b>
                 <span className='offer__price-text'>&nbsp;night</span>
               </div>
               <div className='offer__inside'>
@@ -234,7 +187,12 @@ export const OfferPage: FC<OfferPage> = ({offers, reviews}) => {
             <h2 className='near-places__title'>Other places in the neighbourhood</h2>
             <div className='near-places__list places__list'>
               {neighbourOffers.map((neighbourOffer) => (
-                <OfferCard offer={neighbourOffer} variant={'neighbours'} key={neighbourOffer.id}/>
+                <OfferCard
+                  offer={neighbourOffer}
+                  variant={'neighbours'}
+                  onClick={() => handleOfferClick(neighbourOffer)}
+                  key={neighbourOffer.id}
+                />
               ))}
             </div>
           </section>

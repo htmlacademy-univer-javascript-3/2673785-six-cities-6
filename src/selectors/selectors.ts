@@ -1,6 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from '../types/storeTypes/storeTypes.ts';
 
+// Авторизация
 export const selectAuthorizationState = (state: RootState) => state.authorization;
 
 export const selectAuthorizationStatus = createSelector(
@@ -24,6 +25,7 @@ export const selectAuthorizationError = createSelector(
 );
 
 
+// Предложения
 export const selectOffersState = (state: RootState) => state.offers;
 
 export const selectCurrentCity = createSelector(
@@ -33,6 +35,17 @@ export const selectCurrentCity = createSelector(
 export const selectAllOffers = createSelector(
   selectOffersState,
   (offersState) => offersState.offers
+);
+
+export const selectCurrentOffer = createSelector(
+  selectOffersState,
+  (offersState) => offersState.selectedOffer
+);
+
+export const selectOfferById = () => createSelector(
+  selectAllOffers,
+  (_: RootState, id: string | undefined) => id,
+  (offers, id) => offers.find((offer) => offer.id === id)
 );
 
 export const selectOffersLoading = createSelector(
@@ -54,4 +67,24 @@ export const selectOffersByCurrentCity = createSelector(
 export const selectOffersCountByCurrentCity = createSelector(
   selectOffersByCurrentCity,
   (offers) => offers.length
+);
+
+export const selectFavoritesByCity = createSelector(
+  selectAllOffers,
+  (offers) => {
+    const favorites = offers.filter((offer) => offer.isFavorite);
+    return favorites.reduce<Record<string, typeof favorites>>((acc, offer) => {
+      const city = offer.city.name;
+      if (!acc[city]) {
+        acc[city] = [];
+      }
+      acc[city].push(offer);
+      return acc;
+    }, {});
+  }
+);
+
+export const selectFavoritesCount = createSelector(
+  selectAllOffers,
+  (offers) => offers.filter((offer) => offer.isFavorite).length
 );

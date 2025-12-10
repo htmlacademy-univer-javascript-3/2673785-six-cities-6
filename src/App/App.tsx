@@ -10,11 +10,10 @@ import {Spinner} from '../components/Spinner/Spinner.tsx';
 import {checkAuthorization} from '../features/authorizationThunks.ts';
 
 interface AppProps {
-  favorites: number[];
   reviews: Review[];
 }
 
-const AppInitializer: FC<AppProps> = ({ favorites, reviews }) => {
+const AppInitializer: FC<AppProps> = ({ reviews }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectOffersLoading);
   const offers = useAppSelector(selectAllOffers);
@@ -32,8 +31,6 @@ const AppInitializer: FC<AppProps> = ({ favorites, reviews }) => {
 
   return (
     <MainContainer
-      offers={offers}
-      favorites={favorites}
       reviews={reviews}
     />
   );

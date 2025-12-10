@@ -5,6 +5,7 @@ import { fetchOffers } from './offersThunks';
 interface OffersState {
   city: string;
   offers: Offer[];
+  selectedOffer: Offer | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -12,6 +13,7 @@ interface OffersState {
 const initialState: OffersState = {
   city: 'Paris',
   offers: [],
+  selectedOffer: null,
   isLoading: false,
   error: null,
 };
@@ -25,6 +27,17 @@ const offersSlice = createSlice({
     },
     setOffers: (state, action: PayloadAction<Offer[]>) => {
       state.offers = action.payload;
+    },
+    setOffer: (state, action: PayloadAction<Offer>) => {
+      state.selectedOffer = action.payload;
+    },
+    toggleFavorite: (state, action: PayloadAction<string>) => {
+      const offerId = action.payload;
+      const offer = state.offers.find((off) => off.id === offerId);
+
+      if (offer) {
+        offer.isFavorite = !offer.isFavorite;
+      }
     },
     clearError: (state) => {
       state.error = null;
@@ -47,5 +60,5 @@ const offersSlice = createSlice({
   },
 });
 
-export const { setCity, setOffers, clearError } = offersSlice.actions;
+export const { setCity, setOffers, setOffer, toggleFavorite, clearError } = offersSlice.actions;
 export default offersSlice.reducer;

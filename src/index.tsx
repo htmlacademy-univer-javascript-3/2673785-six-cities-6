@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter} from 'react-router-dom';
 import {App} from './App/App.tsx';
-import {mockFavorites} from './mocks/favorites.ts';
 import {mockReviews} from './mocks/reviews.ts';
 
 const root = ReactDOM.createRoot(
@@ -12,7 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter basename={''}>
-      <App favorites={mockFavorites} reviews={mockReviews}/>
+      <App reviews={mockReviews}/>
     </BrowserRouter>
   </React.StrictMode>
 );
