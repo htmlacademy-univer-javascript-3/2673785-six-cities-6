@@ -1,5 +1,5 @@
-import {CityType} from '../types/offerTypes/offer.ts';
-import {SortType} from '../components/Offers/utils.ts';
+import {CityType} from '../types/offer-types/offer.ts';
+import {SortType} from '../components/offers/utils.ts';
 
 export const CITIES: CityType[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
