@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
 import {Offer} from '../../types/offerTypes/offer.ts';
 import {BookmarkButton} from '../BookmarkButton/BookmarkButton.tsx';
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 
 type CardVariant = 'cities' | 'neighbours' | 'favorites';
 
@@ -12,13 +12,14 @@ interface OfferCardProps {
   variant?: CardVariant;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const OfferCardComponent: FC<OfferCardProps> = ({offer, variant = 'cities', onMouseEnter, onMouseLeave, onClick}) => {
-  const rating = useMemo(() => `${offer.rating * 20}%`, [offer.rating]);
+  const rating = `${offer.rating * 20}%`;
+  const imageSize = variant === 'favorites' ? {width: '150', height: '110'} : {width: '260', height: '200'};
 
-  const cardClassName = useMemo(() => {
+  const getCardClassName = () => {
     switch (variant) {
       case 'neighbours':
         return 'near-places__card place-card';
@@ -27,9 +28,9 @@ const OfferCardComponent: FC<OfferCardProps> = ({offer, variant = 'cities', onMo
       default:
         return 'cities__card place-card';
     }
-  }, [variant]);
+  };
 
-  const imageWrapperClassName = useMemo(() => {
+  const getImageWrapperClassName = () => {
     switch (variant) {
       case 'neighbours':
         return 'near-places__image-wrapper place-card__image-wrapper';
@@ -38,23 +39,16 @@ const OfferCardComponent: FC<OfferCardProps> = ({offer, variant = 'cities', onMo
       default:
         return 'cities__image-wrapper place-card__image-wrapper';
     }
-  }, [variant]);
-
-  const imageSize = useMemo(() => {
-    if (variant === 'favorites') {
-      return {width: '150', height: '110'};
-    }
-    return {width: '260', height: '200'};
-  }, [variant]);
+  };
 
   return (
-    <article className={cardClassName} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onClick}>
+    <article className={getCardClassName()} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={onClick}>
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className={imageWrapperClassName}>
+      <div className={getImageWrapperClassName()}>
         <Link to={`${PageRoutes.OFFER}/${offer.id}`}>
           <img
             className="place-card__image"

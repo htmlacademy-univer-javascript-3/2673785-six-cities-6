@@ -1,5 +1,6 @@
 import {FC, memo} from 'react';
 import {SortType} from './utils.ts';
+import {SORT_TYPES} from '../../constants/constants.ts';
 
 interface SortOptionsProps {
   sortType: SortType;
@@ -14,7 +15,7 @@ const SortOptionsComponent: FC<SortOptionsProps> = ({sortType, selectOpened, onS
 
   return (
     <ul className='places__options places__options--custom places__options--opened'>
-      {(['popular', 'priceLowToHigh', 'priceHighToLow', 'topRatedFirst'] as SortType[]).map((type) => (
+      {SORT_TYPES.map((type) => (
         <li
           key={type}
           className={`places__option ${sortType === type && 'places__option--active'}`}

@@ -16,12 +16,13 @@ import {Offer} from '../../types/offerTypes/offer.ts';
 import {SortOptions} from './SortOptions.tsx';
 
 interface OffersProps {
+  onOfferMouseEnter: (offerId: string) => void;
+  onOfferMouseLeave: () => void;
 }
 
-const OffersComponent: FC<OffersProps> = () => {
+const OffersComponent: FC<OffersProps> = ({onOfferMouseEnter, onOfferMouseLeave}) => {
   const [sortType, setSortType] = useState<SortType>('popular');
   const [selectOpened, setSelectOpened] = useState(false);
-  const [, setActiveOfferId] = useState<string | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -39,14 +40,6 @@ const OffersComponent: FC<OffersProps> = () => {
     setSortType(type);
     setSelectOpened(false);
   }, []);
-
-  const handleOfferMouseEnter = (offerId: string) => {
-    setActiveOfferId(offerId);
-  };
-
-  const handleOfferMouseLeave = () => {
-    setActiveOfferId(null);
-  };
 
   const handleOfferClick = useCallback((selectedOffer: Offer) => {
     dispatch(setOffer(selectedOffer));
@@ -66,11 +59,11 @@ const OffersComponent: FC<OffersProps> = () => {
           key={offer.id}
           variant={'cities'}
           onClick={() => handleOfferClick(offer)}
-          onMouseLeave={handleOfferMouseLeave}
-          onMouseEnter={() => handleOfferMouseEnter(offer.id)}
+          onMouseLeave={onOfferMouseLeave}
+          onMouseEnter={() => onOfferMouseEnter(offer.id)}
         />
       )),
-    [sortedOffers, handleOfferClick]
+    [sortedOffers, handleOfferClick, onOfferMouseLeave, onOfferMouseEnter]
   );
 
   if (isLoading) {

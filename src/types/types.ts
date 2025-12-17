@@ -1,11 +1,5 @@
-export type City = {
-  title: string;
-  lat: number;
-  lng: number;
-  zoom: number;
-}
-
 export type Point = {
+  offerId: string;
   title: string;
   lat: number;
   lng: number;
