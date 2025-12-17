@@ -12,7 +12,7 @@ interface BookmarkButtonProps {
   className?: string;
 }
 
-export const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, size = 'small', className = ''}) => {
+const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, size = 'small', className = ''}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';

@@ -1,6 +1,5 @@
 export interface Host {
-  id: number;
   name: string;
-  avatar: string;
+  avatarUrl: string;
   isPro: boolean;
 }

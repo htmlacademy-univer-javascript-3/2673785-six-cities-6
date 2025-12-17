@@ -1,10 +1,10 @@
-export type Rating = 1 | 2 | 3 | 4 | 5
+import {CommentUser} from './comment.ts';
 
 export interface Review {
-  id: number;
-  userId: number;
+  id: string;
   userName: string;
-  rating: Rating;
+  user: CommentUser;
+  rating: number;
   text: string;
   date: string;
 }
