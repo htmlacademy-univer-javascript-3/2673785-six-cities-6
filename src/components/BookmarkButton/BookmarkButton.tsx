@@ -70,7 +70,7 @@ const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({
       type="button"
       onClick={handleClick}
       aria-label={buttonText}
-      title={isAuthorized ? buttonText : 'Sign in to add to favorites'}
+      title={isAuthorized ? buttonText : 'Log in to add to favorites'}
     >
       <svg
         className={`${size === 'large' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'}`}

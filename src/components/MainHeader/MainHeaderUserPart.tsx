@@ -42,14 +42,14 @@ export const MainHeaderUserPartComponent: FC = () => {
       </li>
       <li className='header__nav-item'>
         <Link to={PageRoutes.LOGIN} className='header__nav-link'>
-          <span className='header__signout' onClick={handleLogout}>Sign out</span>
+          <span className='header__signout' onClick={handleLogout}>Log out</span>
         </Link>
       </li>
     </>
   ) : (
     <li className='header__nav-item'>
       <Link className='header__nav-link' to={PageRoutes.LOGIN}>
-        <span className='header__signout'>Sign in</span>
+        <span className='header__signout'>Log in</span>
       </Link>
     </li>
   );

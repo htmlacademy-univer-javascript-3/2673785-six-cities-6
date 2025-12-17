@@ -115,7 +115,7 @@ export const LoginForm = () => {
 
   return (
     <section className='login'>
-      <h1 className='login__title'>Sign in</h1>
+      <h1 className='login__title'>Log in</h1>
       <button
         type='button'
         className='login__test-data button button--secondary'
@@ -188,7 +188,7 @@ export const LoginForm = () => {
           disabled={isLoading}
           style={{opacity: isLoading ? 0.7 : 1}}
         >
-          {isLoading ? 'Signing in...' : 'Sign in'}
+          {isLoading ? 'Waiting for log in...' : 'Log in'}
         </button>
       </form>
     </section>
