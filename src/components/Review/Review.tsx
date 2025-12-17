@@ -36,7 +36,7 @@ export const Review: FC<ReviewProps> = ({ review }) => {
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <p className="reviews__text">{review.review}</p>
+        <p className="reviews__text">{review.comment}</p>
         <time className="reviews__time" dateTime={review.date}>
           {review.date}
         </time>
