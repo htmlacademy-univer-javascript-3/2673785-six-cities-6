@@ -10,6 +10,7 @@ import {checkAuthorization} from '../features/authorizationThunks.ts';
 import {setFavorites} from '../features/offersSlice.ts';
 import {Offer} from '../types/offerTypes/offer.ts';
 import {fetchFavorites} from '../features/favoritesThunks.ts';
+import {ToastProvider} from '../components/Toast/ToastProvider.tsx';
 
 const AppInitializer: FC = () => {
   const dispatch = useAppDispatch();
@@ -49,6 +50,8 @@ const AppInitializer: FC = () => {
 
 export const App: FC = () => (
   <Provider store={appStore}>
-    <AppInitializer />
+    <ToastProvider position={'top-right'}>
+      <AppInitializer />
+    </ToastProvider>
   </Provider>
 );

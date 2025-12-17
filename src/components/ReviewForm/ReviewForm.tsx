@@ -3,6 +3,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
 import {postComment} from '../../features/offerThunks.ts';
 import {selectCommentLoading, selectCommentError} from '../../selectors/selectors.ts';
 import {clearCommentError} from '../../features/offerSlice.ts';
+import {useToast} from '../Toast/hooks.ts';
 
 interface ReviewFormProps {
   offerId: string;
@@ -10,11 +11,18 @@ interface ReviewFormProps {
 
 export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
   const dispatch = useAppDispatch();
+  const { showSuccess, showError } = useToast();
   const isLoading = useAppSelector(selectCommentLoading);
   const error = useAppSelector(selectCommentError);
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
+
+  useEffect(() => {
+    if (error) {
+      showError(error, 6000);
+    }
+  }, [error, showError]);
 
   useEffect(() => () => {
     dispatch(clearCommentError());
@@ -40,6 +48,13 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
     e.preventDefault();
 
     if (!isFormValid()) {
+      if (rating === 0) {
+        showError('Please select a rating', 3000);
+      } else if (review.length < 50) {
+        showError('Review must be at least 50 characters', 3000);
+      } else if (review.length > 300) {
+        showError('Review must be no more than 300 characters', 3000);
+      }
       return;
     }
 
@@ -47,13 +62,14 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
       try {
         await dispatch(postComment({
           offerId,
-          commentData: {rating, comment: review}
+          commentData: { rating, comment: review }
         })).unwrap();
+
+        showSuccess('Review submitted successfully!', 3000);
 
         setRating(0);
         setReview('');
-      } catch { /* empty */
-      }
+      } catch (err) { /* empty */ }
     })();
   };
 
@@ -115,15 +131,18 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
           your stay with at least{' '}
           <b className="reviews__text-amount">50 characters</b>.
           <br/>
-          <span className="reviews__char-count">
+          <span className={`reviews__char-count ${review.length < 50 ? 'reviews__char-count--warning' : ''}`}>
             {review.length}/300 characters
+            {review.length > 0 && review.length < 50 && (
+              <span className="reviews__char-hint"> (need {50 - review.length} more)</span>
+            )}
           </span>
         </p>
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={!isFormValid() || isLoading}
         >
+          {/* Не хочу дизейблить кнопку, вместо этого валидирую форму и сообщаю почему не отправляется */}
           {isLoading ? 'Submitting...' : 'Submit'}
         </button>
       </div>

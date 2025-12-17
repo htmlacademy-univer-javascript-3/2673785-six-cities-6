@@ -8,8 +8,6 @@ interface ReviewProps {
 export const Review: FC<ReviewProps> = ({ review }) => {
   const rating = `${review.rating * 20}%`;
 
-  console.log(review);
-
   return (
     <li className="reviews__item">
       <div className="reviews__user user">
