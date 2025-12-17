@@ -119,7 +119,7 @@ export const selectNearbyOffers = createSelector(
 
 export const selectComments = createSelector(
   selectCurrentOfferState,
-  (state) => state.comments
+  (state) => state.reviews
 );
 
 export const selectCurrentOfferLoading = createSelector(
@@ -134,12 +134,12 @@ export const selectCurrentOfferError = createSelector(
 
 export const selectCommentLoading = createSelector(
   selectCurrentOfferState,
-  (state) => state.commentLoading
+  (state) => state.reviewLoading
 );
 
 export const selectCommentError = createSelector(
   selectCurrentOfferState,
-  (state) => state.commentError
+  (state) => state.reviewError
 );
 
 export const selectSortedComments = createSelector(

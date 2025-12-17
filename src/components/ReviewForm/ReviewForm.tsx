@@ -14,13 +14,13 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
   const error = useAppSelector(selectCommentError);
 
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [review, setReview] = useState('');
 
   useEffect(() => () => {
     dispatch(clearCommentError());
   }, [dispatch]);
 
-  const isFormValid = () => rating > 0 && comment.length >= 50 && comment.length <= 300;
+  const isFormValid = () => rating > 0 && review.length >= 50 && review.length <= 300;
 
   const handleRatingChange = (value: number) => {
     setRating(value);
@@ -30,7 +30,7 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
+    setReview(e.target.value);
     if (error) {
       dispatch(clearCommentError());
     }
@@ -47,11 +47,11 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
       try {
         await dispatch(postComment({
           offerId,
-          commentData: {rating, comment}
+          commentData: {rating, comment: review}
         })).unwrap();
 
         setRating(0);
-        setComment('');
+        setReview('');
       } catch { /* empty */
       }
     })();
@@ -103,7 +103,7 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        value={comment}
+        value={review}
         onChange={handleCommentChange}
         disabled={isLoading}
         maxLength={300}
@@ -116,7 +116,7 @@ export const ReviewForm: FC<ReviewFormProps> = ({offerId}) => {
           <b className="reviews__text-amount">50 characters</b>.
           <br/>
           <span className="reviews__char-count">
-            {comment.length}/300 characters
+            {review.length}/300 characters
           </span>
         </p>
         <button

@@ -1,8 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, ExtraArgument, RootState} from '../types/storeTypes/storeTypes.ts';
 import {OfferDetailed, Offer} from '../types/offerTypes/offer.ts';
-import {Comment, CommentData} from '../types/offerTypes/comment.ts';
 import {AxiosError} from 'axios';
+import {ReviewData, Review} from '../types/offerTypes/review.ts';
 
 export const fetchOfferById = createAsyncThunk<
   OfferDetailed,
@@ -32,23 +32,23 @@ export const fetchNearbyOffers = createAsyncThunk<
 });
 
 export const fetchComments = createAsyncThunk<
-  Comment[],
+  Review[],
   string,
   { dispatch: AppDispatch; state: RootState; extra: ExtraArgument }
 >('currentOffer/fetchComments', async (offerId, {extra}) => {
   const {api} = extra;
-  const response = await api.get<Comment[]>(`/comments/${offerId}`);
+  const response = await api.get<Review[]>(`/comments/${offerId}`);
   return response.data;
 });
 
 export const postComment = createAsyncThunk<
-  Comment,
-  { offerId: string; commentData: CommentData },
+  Review,
+  { offerId: string; commentData: ReviewData },
   { dispatch: AppDispatch; state: RootState; extra: ExtraArgument; rejectValue: string }
 >('currentOffer/postComment', async ({offerId, commentData}, {extra, rejectWithValue}) => {
   try {
     const {api} = extra;
-    const response = await api.post<Comment>(`/comments/${offerId}`, commentData);
+    const response = await api.post<Review>(`/comments/${offerId}`, commentData);
     return response.data;
   } catch (error: unknown) {
     return rejectWithValue('Failed to post comment');

@@ -1,10 +1,19 @@
-import {CommentUser} from './comment.ts';
-
 export interface Review {
   id: string;
-  userName: string;
-  user: CommentUser;
-  rating: number;
-  text: string;
   date: string;
+  user: User;
+  comment: string;
+  rating: number;
+  userName: string;
+}
+
+interface User {
+  name: string;
+  avatarUrl: string;
+  isPro: boolean;
+}
+
+export interface ReviewData {
+  comment: string;
+  rating: number;
 }
