@@ -1,38 +1,65 @@
 import {Offers} from '../Offers/Offers.tsx';
 import {Map} from '../Map/Map.tsx';
-import {FC, useState} from 'react';
-import {City, Point, Points} from '../../types/types.ts';
+import {FC, useCallback, useMemo, useState} from 'react';
+import {Points} from '../../types/types.ts';
 import {useAppSelector} from '../../hooks/redux.ts';
-import {selectAllOffers} from '../../selectors/selectors.ts';
+import {selectAllOffers, selectCurrentCity} from '../../selectors/selectors.ts';
+import {City} from '../../types/offerTypes/offer.ts';
+import {CITY_COORDINATES} from '../../constants/constants.ts';
 
 export const CityPlaces: FC = () => {
   const offers = useAppSelector(selectAllOffers);
+  const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+  const cityName = useAppSelector(selectCurrentCity);
 
-  const city: City = offers.length > 0 ? {
-    title: offers[0].city.name,
-    lat: offers[0].city.location.latitude,
-    lng: offers[0].city.location.longitude,
-    zoom: 10,
-  } : {
-    title: 'Amsterdam',
-    lat: 52.3740300,
-    lng: 4.8896900,
-    zoom: 10,
-  };
+  const city: City = useMemo(() => {
+    const cityCoordinates = CITY_COORDINATES[cityName];
 
-  const points: Points = offers.length > 0 ? offers.map((offer) => ({
-    title: offer.title,
-    lat: offer.location.latitude,
-    lng: offer.location.longitude,
-  })) : [];
+    return {
+      name: cityName,
+      location: {
+        latitude: cityCoordinates.lat,
+        longitude: cityCoordinates.lng,
+        zoom: cityCoordinates.zoom,
+      }
+    };
+  }, [cityName]);
 
-  const [selectedPoint] = useState<Point>(points[0]);
+  const points: Points = useMemo(() => (
+    offers.map((offer) => ({
+      offerId: offer.id,
+      title: offer.title,
+      lat: offer.location.latitude,
+      lng: offer.location.longitude,
+    }))
+  ), [offers]);
+  const selectedPoint = useMemo(
+    () =>
+      selectedOfferId ? points.find((point) => point.offerId === selectedOfferId) : undefined,
+    [selectedOfferId, points]
+  );
+
+  const handleMouseEnter = useCallback((offerId: string) => {
+    setSelectedOfferId(offerId);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setSelectedOfferId(null);
+  }, []);
+
   return (
     <div className='cities__places-container container'>
-      <Offers/>
+      <Offers onOfferMouseEnter={handleMouseEnter} onOfferMouseLeave={handleMouseLeave}/>
       <div className='cities__right-section'>
         <section className='cities__map map'>
-          <Map city={city} selectedPoint={selectedPoint} points={points}/>
+          <Map
+            city={city}
+            selectedPoint={selectedPoint}
+            points={points}
+            selectedOfferId={selectedOfferId}
+            width={'512px'}
+            height={'607px'}
+          />
         </section>
       </div>
     </div>

@@ -4,7 +4,6 @@ import {OfferDetailed, Offer} from '../types/offerTypes/offer.ts';
 import {Comment, CommentData} from '../types/offerTypes/comment.ts';
 import {AxiosError} from 'axios';
 
-// Загрузка деталей предложения
 export const fetchOfferById = createAsyncThunk<
   OfferDetailed,
   string,
@@ -32,7 +31,6 @@ export const fetchNearbyOffers = createAsyncThunk<
   return response.data;
 });
 
-// Загрузка комментариев
 export const fetchComments = createAsyncThunk<
   Comment[],
   string,
@@ -43,7 +41,6 @@ export const fetchComments = createAsyncThunk<
   return response.data;
 });
 
-// Отправка комментария
 export const postComment = createAsyncThunk<
   Comment,
   { offerId: string; commentData: CommentData },

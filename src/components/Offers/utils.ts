@@ -23,7 +23,7 @@ export const getSortedOffers = (sortType: SortType, offers: Offer[]) => {
       return offersCopy.sort((a, b) => b.rating - a.rating);
 
     case 'popular':
-      return offersCopy.sort((a, b) => b.rating - a.rating);
+      return offersCopy;
 
     default:
       return offersCopy;

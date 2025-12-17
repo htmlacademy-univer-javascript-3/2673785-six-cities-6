@@ -1,18 +1,25 @@
-import { FC, MouseEvent, memo, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
-import { useNavigate } from 'react-router-dom';
-import { PageRoutes } from '../../constants/PageRoutes/PageRoutes.ts';
-import { selectAuthorizationStatus } from '../../selectors/selectors.ts';
-import { toggleFavorite as toggleFavoriteThunk } from '../../features/favoritesThunks.ts';
+import {FC, MouseEvent, memo, useCallback} from 'react';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {useNavigate} from 'react-router-dom';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
+import {selectAuthorizationStatus} from '../../selectors/selectors.ts';
+import {toggleFavorite as toggleFavoriteThunk} from '../../features/favoritesThunks.ts';
 
 interface BookmarkButtonProps {
   offerId: string;
   isFavorite: boolean;
   size?: 'small' | 'large';
   className?: string;
+  onClick?: () => void;
 }
 
-const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, size = 'small', className = ''}) => {
+const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({
+  offerId,
+  isFavorite,
+  size = 'small',
+  className = '',
+  onClick
+}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
@@ -23,9 +30,13 @@ const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, 
 
     if (!isAuthorized) {
       navigate(PageRoutes.LOGIN, {
-        state: { from: window.location.pathname }
+        state: {from: window.location.pathname}
       });
       return;
+    }
+
+    if (onClick) {
+      onClick();
     }
 
     (async () => {
@@ -34,9 +45,10 @@ const BookmarkButtonComponent: FC<BookmarkButtonProps> = ({offerId, isFavorite, 
           offerId,
           isFavorite
         })).unwrap();
-      } catch (error: unknown) { /* empty */ }
+      } catch (error: unknown) { /* empty */
+      }
     })();
-  }, [dispatch, offerId, isFavorite, isAuthorized, navigate]);
+  }, [dispatch, offerId, isFavorite, isAuthorized, navigate, onClick]);
 
   const buttonClass = size === 'large'
     ? 'offer__bookmark-button'

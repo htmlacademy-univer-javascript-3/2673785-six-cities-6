@@ -1,12 +1,12 @@
-import { FC, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
-import { MainHeader } from '../../components/MainHeader/MainHeader.tsx';
-import { Reviews } from '../../components/Reviews/Reviews.tsx';
-import { Map } from '../../components/Map/Map.tsx';
-import { OfferCard } from '../../components/OfferCard/OfferCard.tsx';
-import { Spinner } from '../../components/Spinner/Spinner.tsx';
-import { BookmarkButton } from '../../components/BookmarkButton/BookmarkButton.tsx';
+import {FC, useCallback, useEffect, useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {MainHeader} from '../../components/MainHeader/MainHeader.tsx';
+import {Reviews} from '../../components/Reviews/Reviews.tsx';
+import {Map} from '../../components/Map/Map.tsx';
+import {OfferCard} from '../../components/OfferCard/OfferCard.tsx';
+import {Spinner} from '../../components/Spinner/Spinner.tsx';
+import {BookmarkButton} from '../../components/BookmarkButton/BookmarkButton.tsx';
 import {
   fetchOfferById,
   fetchNearbyOffers,
@@ -18,14 +18,14 @@ import {
   selectCurrentOfferLoading,
   selectCurrentOfferError,
 } from '../../selectors/selectors.ts';
-import { setOffer } from '../../features/offersSlice.ts';
-import { PageRoutes } from '../../constants/PageRoutes/PageRoutes.ts';
-import { City, Point } from '../../types/types.ts';
-import { OfferDetailed } from '../../types/offerTypes/offer.ts';
-import { ErrorPage } from '../ErrorPage/ErrorPage.tsx';
+import {setOffer} from '../../features/offersSlice.ts';
+import {PageRoutes} from '../../constants/PageRoutes/PageRoutes.ts';
+import {Point, Points} from '../../types/types.ts';
+import {OfferDetailed, City} from '../../types/offerTypes/offer.ts';
+import {ErrorPage} from '../ErrorPage/ErrorPage.tsx';
 
 export const OfferPage: FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -50,40 +50,70 @@ export const OfferPage: FC = () => {
     }
   }, [error, navigate]);
 
+  const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+  const [isFavorite, setIsFavorite] = useState(offer?.isFavorite || false);
+
+  const handleMouseEnter = useCallback((offerId: string) => {
+    setSelectedOfferId(offerId);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setSelectedOfferId(null);
+  }, []);
+
   const handleOfferClick = (selectedOffer: OfferDetailed) => {
     dispatch(setOffer(selectedOffer));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top: 0, behavior: 'smooth'});
   };
+
+  const handleBookmarkClick = () => {
+    setIsFavorite((prev) => !prev);
+  };
+
+  const offers = nearbyOffers.slice(0, 3).map((nearbyOffer) => (
+    <OfferCard
+      key={nearbyOffer.id}
+      offer={nearbyOffer}
+      variant="neighbours"
+      onClick={() => handleOfferClick(nearbyOffer as OfferDetailed)}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => handleMouseEnter(nearbyOffer.id)}
+    />
+  ));
 
   if (isLoading) {
     return (
       <div className="page">
-        <MainHeader />
+        <MainHeader/>
         <main className="page__main page__main--offer">
-          <Spinner />
+          <Spinner/>
         </main>
       </div>
     );
   }
 
   if (error || !offer) {
-    return <ErrorPage />;
+    return <ErrorPage/>;
   }
 
   const city: City = {
-    title: offer.city.name,
-    lat: offer.city.location.latitude,
-    lng: offer.city.location.longitude,
-    zoom: 10,
+    name: offer.city.name,
+    location: {
+      latitude: offer.city.location.latitude,
+      longitude: offer.city.location.longitude,
+      zoom: 10,
+    }
   };
 
   const currentPoint: Point = {
+    offerId: offer.id,
     title: offer.title,
     lat: offer.location.latitude,
     lng: offer.location.longitude,
   };
 
-  const nearbyPoints = nearbyOffers.slice(0, 3).map((nearbyOffer) => ({
+  const nearbyPoints: Points = nearbyOffers.slice(0, 3).map((nearbyOffer) => ({
+    offerId: nearbyOffer.id,
     title: nearbyOffer.title,
     lat: nearbyOffer.location.latitude,
     lng: nearbyOffer.location.longitude,
@@ -94,11 +124,10 @@ export const OfferPage: FC = () => {
 
   return (
     <div className="page">
-      <MainHeader />
+      <MainHeader/>
 
       <main className="page__main page__main--offer">
         <section className="offer">
-          {/* Галерея изображений */}
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
               {offer.images.slice(0, 6).map((image, index) => (
@@ -125,14 +154,15 @@ export const OfferPage: FC = () => {
                 <h1 className="offer__name">{offer.title}</h1>
                 <BookmarkButton
                   offerId={offer.id}
-                  isFavorite={offer.isFavorite}
+                  isFavorite={isFavorite}
                   size="large"
+                  onClick={handleBookmarkClick}
                 />
               </div>
 
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: rating }}></span>
+                  <span style={{width: rating}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">
@@ -171,7 +201,9 @@ export const OfferPage: FC = () => {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
-                  <div className={`offer__avatar-wrapper ${offer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}>
+                  <div
+                    className={`offer__avatar-wrapper ${offer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}
+                  >
                     <img
                       className="offer__avatar user__avatar"
                       src={offer.host.avatarUrl}
@@ -190,7 +222,7 @@ export const OfferPage: FC = () => {
                 </div>
               </div>
 
-              <Reviews offerId={offer.id} />
+              <Reviews offerId={offer.id}/>
             </div>
           </div>
 
@@ -199,6 +231,10 @@ export const OfferPage: FC = () => {
               city={city}
               points={allPoints}
               selectedPoint={currentPoint}
+              selectedOfferId={selectedOfferId}
+              height={'600px'}
+              width={'1200px'}
+              offset={'180px'}
             />
           </section>
         </section>
@@ -209,14 +245,7 @@ export const OfferPage: FC = () => {
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {nearbyOffers.slice(0, 3).map((nearbyOffer) => (
-                <OfferCard
-                  key={nearbyOffer.id}
-                  offer={nearbyOffer}
-                  variant="neighbours"
-                  onClick={() => handleOfferClick(nearbyOffer as OfferDetailed)}
-                />
-              ))}
+              {offers}
             </div>
           </section>
         </div>

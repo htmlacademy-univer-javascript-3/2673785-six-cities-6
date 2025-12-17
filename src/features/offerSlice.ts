@@ -43,7 +43,6 @@ const offerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Загрузка предложения
       .addCase(fetchOfferById.pending, (state) => {
         state.loading = true;
         state.error = null;
