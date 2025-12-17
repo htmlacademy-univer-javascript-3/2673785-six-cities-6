@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {createApi} from '../api/api.ts';
-import offersSlice from '../features/offersSlice.ts';
-import authorizationSlice from '../features/authorizationSlice.ts';
-import offerSlice from '../features/offerSlice.ts';
+import offersSlice from '../features/offers-slice.ts';
+import authorizationSlice from '../features/authorization-slice.ts';
+import offerSlice from '../features/offer-slice.ts';
 
 export const api = createApi();
 

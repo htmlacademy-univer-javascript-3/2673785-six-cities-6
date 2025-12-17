@@ -1,5 +1,5 @@
 import {createSelector} from '@reduxjs/toolkit';
-import {RootState} from '../types/storeTypes/storeTypes.ts';
+import {RootState} from '../types/store-types/store-types.ts';
 
 // Авторизация
 export const selectAuthorizationState = (state: RootState) => state.authorization;
