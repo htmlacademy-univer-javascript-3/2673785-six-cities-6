@@ -37,11 +37,6 @@ export const selectAllOffers = createSelector(
   (offersState) => offersState.offers
 );
 
-export const selectCurrentOffer = createSelector(
-  selectOffersState,
-  (offersState) => offersState.selectedOffer
-);
-
 export const selectOfferById = () => createSelector(
   selectAllOffers,
   (_: RootState, id: string | undefined) => id,
@@ -106,4 +101,50 @@ export const selectFavoritesLoading = createSelector(
 export const selectFavoritesError = createSelector(
   selectOffersState,
   (offersState) => offersState.favoritesError
+);
+
+
+// Предложение
+export const selectCurrentOfferState = (state: RootState) => state.offer;
+
+export const selectCurrentOffer = createSelector(
+  selectCurrentOfferState,
+  (state) => state.offer
+);
+
+export const selectNearbyOffers = createSelector(
+  selectCurrentOfferState,
+  (state) => state.nearbyOffers
+);
+
+export const selectComments = createSelector(
+  selectCurrentOfferState,
+  (state) => state.comments
+);
+
+export const selectCurrentOfferLoading = createSelector(
+  selectCurrentOfferState,
+  (state) => state.loading
+);
+
+export const selectCurrentOfferError = createSelector(
+  selectCurrentOfferState,
+  (state) => state.error
+);
+
+export const selectCommentLoading = createSelector(
+  selectCurrentOfferState,
+  (state) => state.commentLoading
+);
+
+export const selectCommentError = createSelector(
+  selectCurrentOfferState,
+  (state) => state.commentError
+);
+
+export const selectSortedComments = createSelector(
+  selectComments,
+  (comments) => [...comments]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 10)
 );

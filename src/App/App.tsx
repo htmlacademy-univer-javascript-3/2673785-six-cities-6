@@ -1,6 +1,5 @@
 import {FC, useEffect} from 'react';
 import {MainContainer} from '../MainContainer/MainContainer.tsx';
-import {Review} from '../types/offerTypes/review.ts';
 import {Provider} from 'react-redux';
 import {appStore} from '../store/store.ts';
 import {useAppDispatch, useAppSelector} from '../hooks/redux.ts';
@@ -12,11 +11,7 @@ import {setFavorites} from '../features/offersSlice.ts';
 import {Offer} from '../types/offerTypes/offer.ts';
 import {fetchFavorites} from '../features/favoritesThunks.ts';
 
-interface AppProps {
-  reviews: Review[];
-}
-
-const AppInitializer: FC<AppProps> = ({ reviews }) => {
+const AppInitializer: FC = () => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectOffersLoading);
   const offers = useAppSelector(selectAllOffers);
@@ -33,6 +28,8 @@ const AppInitializer: FC<AppProps> = ({ reviews }) => {
         .unwrap()
         .then((favorites: Offer[]) => {
           dispatch(setFavorites(favorites));
+        }).catch(() => {
+          dispatch(setFavorites([]));
         });
     } else {
       dispatch(setFavorites([]));
@@ -46,14 +43,12 @@ const AppInitializer: FC<AppProps> = ({ reviews }) => {
   }
 
   return (
-    <MainContainer
-      reviews={reviews}
-    />
+    <MainContainer />
   );
 };
 
-export const App: FC<AppProps> = (props) => (
+export const App: FC = () => (
   <Provider store={appStore}>
-    <AppInitializer {...props}/>
+    <AppInitializer />
   </Provider>
 );

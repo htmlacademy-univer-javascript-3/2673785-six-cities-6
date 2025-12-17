@@ -1,3 +1,5 @@
+import {Host} from './host.ts';
+
 export type CityType =
   | 'Paris'
   | 'Amsterdam'
@@ -29,4 +31,13 @@ export interface Offer {
     longitude: number;
   };
   isPremium: boolean;
+}
+
+export interface OfferDetailed extends Offer {
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: Host;
+  images: string[];
+  maxAdults: number;
 }
