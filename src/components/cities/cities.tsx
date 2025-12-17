@@ -1,8 +1,8 @@
 import {FC, memo, MouseEvent, useCallback, useMemo} from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux.ts';
-import { setCity } from '../../features/offers-slice.ts';
+import { useAppDispatch, useAppSelector } from '../../features/hooks/redux.ts';
+import { setCity } from '../../features/offers/offers-slice.ts';
 import { CITIES } from '../../constants/constants.ts';
-import { selectCurrentCity } from '../../selectors/selectors.ts';
+import { selectCurrentCity } from '../../features/offers/offersSelectors.ts';
 import {CityType} from '../../types/offer-types/offer.ts';
 
 export const CitiesComponent: FC = () => {

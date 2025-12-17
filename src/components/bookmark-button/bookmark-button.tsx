@@ -1,9 +1,9 @@
 import {FC, MouseEvent, memo, useCallback} from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
 import {useNavigate} from 'react-router-dom';
 import {PageRoutes} from '../../constants/page-routes/page-routes.ts';
-import {selectAuthorizationStatus} from '../../selectors/selectors.ts';
-import {toggleFavorite as toggleFavoriteThunk} from '../../features/favorites-thunks.ts';
+import {selectAuthorizationStatus} from '../../features/auth/authSelectors.ts';
+import {toggleFavorite as toggleFavoriteThunk} from '../../features/favorites/favorites-thunks.ts';
 
 interface BookmarkButtonProps {
   offerId: string;

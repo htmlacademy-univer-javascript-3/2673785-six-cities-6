@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppDispatch, ExtraArgument, RootState } from '../types/store-types/store-types.ts';
-import { Offer } from '../types/offer-types/offer.ts';
+import { AppDispatch, ExtraArgument, RootState } from '../../types/store-types/store-types.ts';
+import { Offer } from '../../types/offer-types/offer.ts';
 
 export const fetchFavorites = createAsyncThunk<
   Offer[],

@@ -1,17 +1,17 @@
 import {OfferCard} from '../offer-card/offer-card.tsx';
 import {FC, memo, useCallback, useMemo, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
 import {
   selectCurrentCity,
   selectOffersByCurrentCity,
   selectOffersCountByCurrentCity,
   selectOffersLoading,
   selectOffersError
-} from '../../selectors/selectors.ts';
+} from '../../features/offers/offersSelectors.ts';
 import {EmptyOffers} from './empty-offers.tsx';
 import {SortType, SortTypeToTitle, getSortedOffers} from './utils.ts';
 import {Spinner} from '../spinner/spinner.tsx';
-import {setOffer} from '../../features/offers-slice.ts';
+import {setOffer} from '../../features/offers/offers-slice.ts';
 import {Offer} from '../../types/offer-types/offer.ts';
 import {SortOptions} from './sort-options.tsx';
 

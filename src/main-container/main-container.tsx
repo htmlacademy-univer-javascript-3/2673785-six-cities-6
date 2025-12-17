@@ -1,9 +1,9 @@
 import type {FC} from 'react';
+import {Routes, Route} from 'react-router-dom';
 import {MainPage} from '../pages/main-page/main-page.tsx';
 import {FavoritesPage} from '../pages/favorites-page/favorites-page.tsx';
 import {LoginPage} from '../pages/login-page/login-page.tsx';
 import {OfferPage} from '../pages/offer-page/offer-page.tsx';
-import {Routes, Route} from 'react-router-dom';
 import {ErrorPage} from '../pages/error-page/error-page.tsx';
 import {PrivateRoute} from '../components/private-route/private-route.tsx';
 import {PageRoutes} from '../constants/page-routes/page-routes.ts';

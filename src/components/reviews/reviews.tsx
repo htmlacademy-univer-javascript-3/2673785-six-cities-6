@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { Review } from '../review/review.tsx';
 import { ReviewForm } from '../review-form/review-form.tsx';
-import { useAppSelector } from '../../hooks/redux.ts';
-import { selectSortedComments, selectAuthorizationStatus } from '../../selectors/selectors.ts';
+import { useAppSelector } from '../../features/hooks/redux.ts';
+import { selectSortedComments } from '../../features/offer/offerSelectors.ts';
+import {selectAuthorizationStatus} from '../../features/auth/authSelectors.ts';
 import { Review as ReviewType } from '../../types/offer-types/review.ts';
 
 interface ReviewsProps {

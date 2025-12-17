@@ -1,8 +1,8 @@
 import React, {FC, useState, FormEvent, useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
-import {postComment} from '../../features/offer-thunks.ts';
-import {selectCommentLoading, selectCommentError} from '../../selectors/selectors.ts';
-import {clearCommentError} from '../../features/offer-slice.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
+import {postComment} from '../../features/offer/offer-thunks.ts';
+import {selectCommentLoading, selectCommentError} from '../../features/offer/offerSelectors.ts';
+import {clearCommentError} from '../../features/offer/offer-slice.ts';
 import {useToast} from '../toast/hooks.ts';
 
 interface ReviewFormProps {

@@ -1,11 +1,11 @@
 import {FC, memo, useCallback} from 'react';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
 import {
   selectAuthorizationStatus,
-  selectFavoritesCount,
   selectUser
-} from '../../selectors/selectors.ts';
-import {logout} from '../../features/authorization-slice.ts';
+} from '../../features/auth/authSelectors.ts';
+import {selectFavoritesCount} from '../../features/favorites/favoritesSelectors.ts';
+import {logout} from '../../features/auth/authorization-slice.ts';
 import {Link} from 'react-router-dom';
 import {PageRoutes} from '../../constants/page-routes/page-routes.ts';
 
@@ -14,6 +14,8 @@ export const MainHeaderUserPartComponent: FC = () => {
   const isAuthorized = useAppSelector(selectAuthorizationStatus) === 'AUTH';
   const user = useAppSelector(selectUser);
   const favoritesCount = useAppSelector(selectFavoritesCount);
+
+  const userName = user?.email || 'Guest';
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
@@ -34,7 +36,7 @@ export const MainHeaderUserPartComponent: FC = () => {
               />
             )}
           </div>
-          <span className='header__user-name user__name'>{user?.email || 'Guest'}</span>
+          <span className='header__user-name user__name'>{userName}</span>
           <span className='header__favorite-count'>
             {favoritesCount}
           </span>

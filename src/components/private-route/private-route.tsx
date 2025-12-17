@@ -1,8 +1,8 @@
 import {type FC, ReactNode} from 'react';
 import {Navigate, useLocation} from 'react-router-dom';
-import {useAppSelector} from '../../hooks/redux.ts';
+import {useAppSelector} from '../../features/hooks/redux.ts';
 import {Spinner} from '../spinner/spinner.tsx';
-import {selectAuthorizationStatus} from '../../selectors/selectors.ts';
+import {selectAuthorizationStatus} from '../../features/auth/authSelectors.ts';
 
 interface PrivateRouteProps {
   redirectPath: string;

@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {CityType, Offer} from '../types/offer-types/offer.ts';
+import {CityType, Offer} from '../../types/offer-types/offer.ts';
 import {fetchOffers} from './offers-thunks.ts';
-import {toggleFavorite as toggleFavoriteThunk} from './favorites-thunks.ts';
+import {toggleFavorite as toggleFavoriteThunk} from '../favorites/favorites-thunks.ts';
 
 interface OffersState {
   city: CityType;

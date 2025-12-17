@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OfferDetailed, Offer } from '../types/offer-types/offer.ts';
-import { Review } from '../types/offer-types/review.ts';
+import { OfferDetailed, Offer } from '../../types/offer-types/offer.ts';
+import { Review } from '../../types/offer-types/review.ts';
 import { fetchOfferById, fetchNearbyOffers, fetchComments, postComment } from './offer-thunks.ts';
 
 interface CurrentOfferState {

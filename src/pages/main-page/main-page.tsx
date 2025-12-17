@@ -2,13 +2,13 @@ import type {FC} from 'react';
 import {Cities} from '../../components/cities/cities.tsx';
 import {MainHeader} from '../../components/main-header/main-header.tsx';
 import {CityPlaces} from '../../components/city-places/city-places.tsx';
-import {useAppSelector} from '../../hooks/redux.ts';
+import {useAppSelector} from '../../features/hooks/redux.ts';
 import {
   selectCurrentCity,
   selectOffersByCurrentCity,
   selectOffersError,
   selectOffersLoading
-} from '../../selectors/selectors.ts';
+} from '../../features/offers/offersSelectors.ts';
 import {EmptyMainPage} from './empty-main-page.tsx';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 

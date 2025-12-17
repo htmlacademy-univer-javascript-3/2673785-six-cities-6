@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { AppDispatch, RootState, ExtraArgument } from '../types/store-types/store-types.ts';
+import { AppDispatch, RootState, ExtraArgument } from '../../types/store-types/store-types.ts';
 
 export interface AuthorizationData {
   email: string;

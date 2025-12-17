@@ -1,8 +1,8 @@
 import {ChangeEvent, FormEvent, useState} from 'react';
-import {clearError} from '../../features/authorization-slice.ts';
-import {login} from '../../features/authorization-thunks.ts';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
-import {selectAuthorizationError, selectAuthorizationLoading} from '../../selectors/selectors.ts';
+import {clearError} from '../../features/auth/authorization-slice.ts';
+import {login} from '../../features/auth/authorization-thunks.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
+import {selectAuthorizationError, selectAuthorizationLoading} from '../../features/auth/authSelectors.ts';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {PageRoutes} from '../../constants/page-routes/page-routes.ts';
 
@@ -19,13 +19,13 @@ type LoginForm = {
 
 export const LoginForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const from = (location.state as LocationState)?.from?.pathname || PageRoutes.MAIN;
 
   const isLoading: boolean = useAppSelector(selectAuthorizationLoading);
   const error = useAppSelector(selectAuthorizationError);
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as LocationState)?.from?.pathname || PageRoutes.MAIN;
 
   const [loginFormData, setLoginFormData] = useState<LoginForm>({
     email: '',

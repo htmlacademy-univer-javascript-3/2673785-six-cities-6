@@ -3,8 +3,8 @@ import {Link, useNavigate, useLocation} from 'react-router-dom';
 import {PageRoutes} from '../../constants/page-routes/page-routes.ts';
 import {LoginPageHeader} from './login-page-header.tsx';
 import {LoginForm} from './login-form.tsx';
-import {useAppSelector} from '../../hooks/redux.ts';
-import {selectAuthorizationStatus, selectAuthorizationError} from '../../selectors/selectors.ts';
+import {useAppSelector} from '../../features/hooks/redux.ts';
+import {selectAuthorizationStatus, selectAuthorizationError} from '../../features/auth/authSelectors.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {useToast} from '../../components/toast/hooks.ts';
 
@@ -16,9 +16,10 @@ interface LocationState {
 
 export const LoginPage: FC = () => {
   const navigate = useNavigate();
+  const {showError, showWarning, showInfo} = useToast();
+
   const location = useLocation();
   const locationState = location.state as LocationState;
-  const { showError, showWarning, showInfo } = useToast();
 
   const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const authError = useAppSelector(selectAuthorizationError);
@@ -50,7 +51,7 @@ export const LoginPage: FC = () => {
 
       const timer = setTimeout(() => {
         const from = locationState?.from || PageRoutes.MAIN;
-        navigate(from, { replace: true });
+        navigate(from, {replace: true});
       }, 500);
 
       return () => clearTimeout(timer);
@@ -71,7 +72,7 @@ export const LoginPage: FC = () => {
 
       <main className='page__main page__main--login'>
         <div className='page__login-container container'>
-          <LoginForm></LoginForm>
+          <LoginForm/>
           <section className='locations locations--login locations--current'>
             <div className='locations__item'>
               <Link to={PageRoutes.MAIN} className='locations__item-link'>

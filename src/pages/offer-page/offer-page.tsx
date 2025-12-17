@@ -1,33 +1,35 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from '../../hooks/redux.ts';
+import {useAppDispatch, useAppSelector} from '../../features/hooks/redux.ts';
 import {MainHeader} from '../../components/main-header/main-header.tsx';
 import {Reviews} from '../../components/reviews/reviews.tsx';
 import {Map} from '../../components/map/map.tsx';
 import {OfferCard} from '../../components/offer-card/offer-card.tsx';
 import {Spinner} from '../../components/spinner/spinner.tsx';
-import {BookmarkButton} from '../../components/bookmark-button/bookmark-button.tsx';
 import {
   fetchOfferById,
   fetchNearbyOffers,
   fetchComments,
-} from '../../features/offer-thunks.ts';
+} from '../../features/offer/offer-thunks.ts';
 import {
   selectCurrentOffer,
   selectNearbyOffers,
   selectCurrentOfferLoading,
   selectCurrentOfferError,
-} from '../../selectors/selectors.ts';
-import {setOffer} from '../../features/offers-slice.ts';
+} from '../../features/offer/offerSelectors.ts';
+import {setOffer} from '../../features/offers/offers-slice.ts';
 import {PageRoutes} from '../../constants/page-routes/page-routes.ts';
 import {Point, Points} from '../../types/types.ts';
 import {OfferDetailed, City} from '../../types/offer-types/offer.ts';
 import {ErrorPage} from '../error-page/error-page.tsx';
+import {OfferGallery} from '../../components/offer-components/offer-gallery.tsx';
+import {OfferInfo} from '../../components/offer-components/offer-info.tsx';
+import {OfferHost} from '../../components/offer-components/offer-host.tsx';
 
 export const OfferPage: FC = () => {
-  const {id} = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const {id} = useParams<{ id: string }>();
 
   const offer = useAppSelector(selectCurrentOffer);
   const nearbyOffers = useAppSelector(selectNearbyOffers);
@@ -51,7 +53,6 @@ export const OfferPage: FC = () => {
   }, [error, navigate]);
 
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
-  const [isFavorite, setIsFavorite] = useState(offer?.isFavorite || false);
 
   const handleMouseEnter = useCallback((offerId: string) => {
     setSelectedOfferId(offerId);
@@ -66,15 +67,11 @@ export const OfferPage: FC = () => {
     window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
-  const handleBookmarkClick = () => {
-    setIsFavorite((prev) => !prev);
-  };
-
   const offers = nearbyOffers.slice(0, 3).map((nearbyOffer) => (
     <OfferCard
       key={nearbyOffer.id}
       offer={nearbyOffer}
-      variant="neighbours"
+      variant='neighbours'
       onClick={() => handleOfferClick(nearbyOffer as OfferDetailed)}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={() => handleMouseEnter(nearbyOffer.id)}
@@ -83,9 +80,9 @@ export const OfferPage: FC = () => {
 
   if (isLoading) {
     return (
-      <div className="page">
+      <div className='page'>
         <MainHeader/>
-        <main className="page__main page__main--offer">
+        <main className='page__main page__main--offer'>
           <Spinner/>
         </main>
       </div>
@@ -120,113 +117,26 @@ export const OfferPage: FC = () => {
   }));
 
   const allPoints = [currentPoint, ...nearbyPoints];
-  const rating = `${Math.round(offer.rating) * 20}%`;
 
   return (
-    <div className="page">
+    <div className='page'>
       <MainHeader/>
 
-      <main className="page__main page__main--offer">
-        <section className="offer">
-          <div className="offer__gallery-container container">
-            <div className="offer__gallery">
-              {offer.images.slice(0, 6).map((image, index) => (
-                <div className="offer__image-wrapper" key={image}>
-                  <img
-                    className="offer__image"
-                    src={image}
-                    alt={`Photo studio ${index + 1}`}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+      <main className='page__main page__main--offer'>
+        <section className='offer'>
+          <OfferGallery images={offer.images}/>
 
-          <div className="offer__container container">
-            <div className="offer__wrapper">
-              {offer.isPremium && (
-                <div className="offer__mark">
-                  <span>Premium</span>
-                </div>
-              )}
+          <div className='offer__container container'>
+            <div className='offer__wrapper'>
+              <OfferInfo offer={offer}></OfferInfo>
 
-              <div className="offer__name-wrapper">
-                <h1 className="offer__name">{offer.title}</h1>
-                <BookmarkButton
-                  offerId={offer.id}
-                  isFavorite={isFavorite}
-                  size="large"
-                  onClick={handleBookmarkClick}
-                />
-              </div>
-
-              <div className="offer__rating rating">
-                <div className="offer__stars rating__stars">
-                  <span style={{width: rating}}></span>
-                  <span className="visually-hidden">Rating</span>
-                </div>
-                <span className="offer__rating-value rating__value">
-                  {offer.rating.toFixed(1)}
-                </span>
-              </div>
-
-              <ul className="offer__features">
-                <li className="offer__feature offer__feature--entire">
-                  {offer.type.charAt(0).toUpperCase() + offer.type.slice(1)}
-                </li>
-                <li className="offer__feature offer__feature--bedrooms">
-                  {offer.bedrooms} {offer.bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}
-                </li>
-                <li className="offer__feature offer__feature--adults">
-                  Max {offer.maxAdults} {offer.maxAdults === 1 ? 'adult' : 'adults'}
-                </li>
-              </ul>
-
-              <div className="offer__price">
-                <b className="offer__price-value">€{offer.price}</b>
-                <span className="offer__price-text">&nbsp;night</span>
-              </div>
-
-              <div className="offer__inside">
-                <h2 className="offer__inside-title">What&apos;s inside</h2>
-                <ul className="offer__inside-list">
-                  {offer.goods.map((good) => (
-                    <li className="offer__inside-item" key={good}>
-                      {good}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="offer__host">
-                <h2 className="offer__host-title">Meet the host</h2>
-                <div className="offer__host-user user">
-                  <div
-                    className={`offer__avatar-wrapper ${offer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}
-                  >
-                    <img
-                      className="offer__avatar user__avatar"
-                      src={offer.host.avatarUrl}
-                      width="74"
-                      height="74"
-                      alt={offer.host.name}
-                    />
-                  </div>
-                  <span className="offer__user-name">{offer.host.name}</span>
-                  {offer.host.isPro && (
-                    <span className="offer__user-status">Pro</span>
-                  )}
-                </div>
-                <div className="offer__description">
-                  <p className="offer__text">{offer.description}</p>
-                </div>
-              </div>
+              <OfferHost host={offer.host} description={offer.description}/>
 
               <Reviews offerId={offer.id}/>
             </div>
           </div>
 
-          <section className="offer__map map">
+          <section className='offer__map map'>
             <Map
               city={city}
               points={allPoints}
@@ -239,12 +149,12 @@ export const OfferPage: FC = () => {
           </section>
         </section>
 
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">
+        <div className='container'>
+          <section className='near-places places'>
+            <h2 className='near-places__title'>
               Other places in the neighbourhood
             </h2>
-            <div className="near-places__list places__list">
+            <div className='near-places__list places__list'>
               {offers}
             </div>
           </section>

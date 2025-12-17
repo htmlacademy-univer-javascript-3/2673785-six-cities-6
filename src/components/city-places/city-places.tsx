@@ -2,8 +2,8 @@ import {Offers} from '../offers/offers.tsx';
 import {Map} from '../map/map.tsx';
 import {FC, useCallback, useMemo, useState} from 'react';
 import {Points} from '../../types/types.ts';
-import {useAppSelector} from '../../hooks/redux.ts';
-import {selectAllOffers, selectCurrentCity} from '../../selectors/selectors.ts';
+import {useAppSelector} from '../../features/hooks/redux.ts';
+import {selectAllOffers, selectCurrentCity} from '../../features/offers/offersSelectors.ts';
 import {City} from '../../types/offer-types/offer.ts';
 import {CITY_COORDINATES} from '../../constants/constants.ts';
 
@@ -33,6 +33,7 @@ export const CityPlaces: FC = () => {
       lng: offer.location.longitude,
     }))
   ), [offers]);
+
   const selectedPoint = useMemo(
     () =>
       selectedOfferId ? points.find((point) => point.offerId === selectedOfferId) : undefined,

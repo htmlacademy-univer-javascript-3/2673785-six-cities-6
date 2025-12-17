@@ -1,8 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {AppDispatch, ExtraArgument, RootState} from '../types/store-types/store-types.ts';
-import {OfferDetailed, Offer} from '../types/offer-types/offer.ts';
+import {AppDispatch, ExtraArgument, RootState} from '../../types/store-types/store-types.ts';
+import {OfferDetailed, Offer} from '../../types/offer-types/offer.ts';
 import {AxiosError} from 'axios';
-import {ReviewData, Review} from '../types/offer-types/review.ts';
+import {ReviewData, Review} from '../../types/offer-types/review.ts';
 
 export const fetchOfferById = createAsyncThunk<
   OfferDetailed,

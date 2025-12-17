@@ -14,13 +14,14 @@ export const EmptyMainPage: FC<EmptyMainPageProps> = ({city, type}) => {
   const message = type === 'empty'
     ? `We could not find any property available at the moment in ${city}`
     : 'Error occurred while loading offers';
+
   return (
     <div className='page page--gray page--main'>
-      <MainHeader />
+      <MainHeader/>
 
       <main className='page__main page__main--index page__main--index-empty'>
         <h1 className='visually-hidden'>Cities</h1>
-        <Cities />
+        <Cities/>
 
         <div className='cities'>
           <div className='cities__places-container cities__places-container--empty container'>
